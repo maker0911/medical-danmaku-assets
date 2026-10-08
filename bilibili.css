@@ -42,7 +42,7 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
   background: transparent !important;
   border: solid transparent !important;
   border-width: 50px 125px 43px 125px !important;
-  border-image-source: url("assets/medical_ui_assets/slices/message_base_cropped.svg") !important;
+  border-image-source: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/message_base_cropped.svg") !important;
   border-image-slice: 228 567 197 568 fill !important;
   border-image-width: 50px 125px 43px 125px !important;
   border-image-repeat: stretch !important;
@@ -65,7 +65,7 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
   top: -93px;
   width: 158px;
   height: 201px;
-  background-image: url("assets/medical_ui_assets/canvas/iv_bag_and_tube.png");
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/iv_bag_and_tube.png");
   background-position: -50px -39px;
 }
 
@@ -74,7 +74,7 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
   bottom: -55px;
   width: 105px;
   height: 82px;
-  background-image: url("assets/medical_ui_assets/canvas/bandage.png");
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/bandage.png");
   background-position: -744px -178px;
 }
 
@@ -154,7 +154,7 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
   inset: 0;
   border: solid transparent;
   border-width: 0 120px 0 59px;
-  border-image-source: url("assets/medical_ui_assets/slices/nickname_normalized.png");
+  border-image-source: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/nickname_normalized.png");
   border-image-slice: 0 544 0 266 fill;
   border-image-width: 0 120px 0 59px;
   border-image-repeat: stretch;
