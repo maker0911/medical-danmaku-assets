@@ -22,7 +22,7 @@ yt-live-chat-text-message-renderer {
   padding: 0 !important;
   overflow: visible !important;
   font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif !important;
-  animation: medical-danmaku-enter 220ms ease-out both !important;
+  animation: medical-danmaku-enter 420ms cubic-bezier(0.20, 0.80, 0.20, 1) both !important;
 }
 
 /* BLiveChat 的文字弹幕卡片是 #content，没有 #card。 */
@@ -67,7 +67,7 @@ yt-live-chat-text-message-renderer #content::before {
   background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/iv_bag.png");
   background-position: -50px -39px;
   transform-origin: 44px 9px;
-  animation: medical-bag-sway 10s ease-in-out infinite !important;
+  animation: medical-bag-sway 4s ease-in-out infinite !important;
 }
 
 yt-live-chat-text-message-renderer #content::after {
@@ -78,7 +78,7 @@ yt-live-chat-text-message-renderer #content::after {
   background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/bandage.png");
   background-position: -744px -178px;
   transform-origin: center center;
-  animation: medical-bandage-settle 240ms ease-out both !important;
+  animation: medical-bandage-settle 500ms ease-out both !important;
 }
 
 yt-live-chat-text-message-renderer #image-and-message {
@@ -105,7 +105,7 @@ yt-live-chat-text-message-renderer #image-and-message::before {
   pointer-events: none;
   background: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/iv_tube.png") -60px -158px / 901px 300px no-repeat;
   transform-origin: 50% 100%;
-  animation: medical-tube-flex 10s ease-in-out -9.8s infinite !important;
+  animation: medical-tube-flex 4s ease-in-out -3.8s infinite !important;
 }
 
 yt-live-chat-text-message-renderer #message {
@@ -214,22 +214,22 @@ yt-live-chat-text-message-renderer .emoji.blc-large-emoji {
 
 /* 入场只播放一次，随后仅输液袋与软管缓慢循环。 */
 @keyframes medical-danmaku-enter {
-  from { opacity: 0; transform: translateY(4px); }
+  from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes medical-bag-sway {
-  0%, 100% { transform: rotate(-0.8deg); }
-  50%      { transform: rotate(0.8deg); }
+  0%, 100% { transform: rotate(-3deg); }
+  50%      { transform: rotate(3deg); }
 }
 
 @keyframes medical-tube-flex {
-  0%, 100% { transform: skewX(-1.2deg); }
-  50%      { transform: skewX(1.2deg); }
+  0%, 100% { transform: skewX(-4deg); }
+  50%      { transform: skewX(4deg); }
 }
 
 @keyframes medical-bandage-settle {
-  from { transform: rotate(1deg); }
+  from { transform: rotate(8deg); }
   to   { transform: rotate(0deg); }
 }
 
