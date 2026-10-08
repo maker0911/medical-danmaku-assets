@@ -1,4 +1,4 @@
-/* 水色医疗弹幕：基础款，所有文字弹幕共用。与示例代码相同的 yt-live-chat DOM 结构。 */
+/* BLiveChat 通用文字弹幕：所有用户共用一款，静态显示。 */
 
 body,
 yt-live-chat-renderer,
@@ -7,33 +7,33 @@ yt-live-chat-item-list-renderer,
   background: transparent !important;
 }
 
+#items { container-type: inline-size; }
 yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
 
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer),
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) * {
+yt-live-chat-text-message-renderer,
+yt-live-chat-text-message-renderer * {
   box-sizing: border-box !important;
   animation: none !important;
   transition: none !important;
 }
 
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) {
+yt-live-chat-text-message-renderer {
   display: block !important;
-  width: max-content !important;
-  max-width: calc(100% - 30px) !important;
-  margin: 50px 15px 30px !important;
+  width: auto !important;
+  margin: 52px 28px 32px 42px !important;
   padding: 0 !important;
   overflow: visible !important;
   font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif !important;
 }
 
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) #card {
+/* BLiveChat 的文字弹幕卡片是 #content，没有 #card。 */
+yt-live-chat-text-message-renderer #content {
   position: relative !important;
   isolation: isolate;
-  display: flex !important;
-  align-items: center !important;
+  display: block !important;
   width: max-content !important;
-  min-width: 500px !important;
-  max-width: min(820px, calc(100vw - 50px)) !important;
+  min-width: min(500px, 100%) !important;
+  max-width: 100% !important;
   min-height: 166px !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -49,8 +49,8 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
 }
 
 /* 原始透明全画布图按 0.22 倍显示，只在固定区域露出装饰。 */
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) #card::before,
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) #card::after {
+yt-live-chat-text-message-renderer #content::before,
+yt-live-chat-text-message-renderer #content::after {
   content: "";
   position: absolute;
   display: block;
@@ -60,7 +60,7 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
   background-size: 901px 300px;
 }
 
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) #card::before {
+yt-live-chat-text-message-renderer #content::before {
   left: -148px;
   top: -93px;
   width: 158px;
@@ -69,7 +69,7 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
   background-position: -50px -39px;
 }
 
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) #card::after {
+yt-live-chat-text-message-renderer #content::after {
   right: -134px;
   bottom: -55px;
   width: 105px;
@@ -78,8 +78,8 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
   background-position: -744px -178px;
 }
 
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) #content {
-  position: static !important;
+yt-live-chat-text-message-renderer #image-and-message {
+  position: relative !important;
   display: block !important;
   width: 100% !important;
   min-width: 0 !important;
@@ -90,7 +90,7 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
   overflow: visible !important;
 }
 
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) :is(#image-and-message, #message) {
+yt-live-chat-text-message-renderer #message {
   display: block !important;
   min-width: 0 !important;
   margin: 0 !important;
@@ -99,7 +99,7 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
   background: transparent !important;
 }
 
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) #message {
+yt-live-chat-text-message-renderer #message {
   color: #5b7489 !important;
   font-size: 28px !important;
   font-weight: 700 !important;
@@ -109,9 +109,9 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
   text-shadow: none !important;
 }
 
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) yt-live-chat-author-chip {
+yt-live-chat-text-message-renderer yt-live-chat-author-chip {
   position: absolute !important;
-  z-index: 3 !important;
+  z-index: 5 !important;
   left: -72px !important;
   top: -67px !important;
   display: block !important;
@@ -124,14 +124,14 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
   transform-origin: left top !important;
 }
 
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) #author-name {
+yt-live-chat-text-message-renderer #author-name {
   position: relative !important;
   isolation: isolate;
   display: block !important;
   box-sizing: border-box !important;
   width: max-content !important;
   min-width: 260px !important;
-  max-width: 600px !important;
+  max-width: min(600px, calc(100vw - 130px)) !important;
   height: 53px !important;
   margin: 0 !important;
   padding: 14px 100px 0 44px !important;
@@ -147,7 +147,7 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
   border: 0 !important;
 }
 
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) #author-name::before {
+yt-live-chat-text-message-renderer #author-name::before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -161,19 +161,31 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
   pointer-events: none;
 }
 
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) :is(#author-photo, #chat-medal, #chat-badges, #chip-badges, yt-live-chat-author-medal-renderer) {
+yt-live-chat-text-message-renderer :is(#author-photo, #chat-medal, #chat-badges, #chip-badges, yt-live-chat-author-medal-renderer, #timestamp) {
   display: none !important;
 }
 
-:is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) .emoji {
+yt-live-chat-text-message-renderer .emoji {
   display: inline-block !important;
-  width: 1.25em !important;
+  width: auto !important;
   height: 1.25em !important;
   vertical-align: -0.2em !important;
 }
 
-@media (max-width: 560px) {
-  :is(yt-live-chat-text-message-renderer, yt-live-chat-interact-message-renderer) #card {
-    min-width: min(500px, calc(100vw - 50px)) !important;
+
+
+
+/* 窄弹幕窗口使用小一号的边框切片，端部和装饰仍保持固定尺寸。 */
+@container (max-width: 600px) {
+  yt-live-chat-text-message-renderer #content {
+    border-width: 50px 90px 43px 90px !important;
+    border-image-width: 50px 90px 43px 90px !important;
   }
+
+  yt-live-chat-text-message-renderer #content::before { left: -113px; }
+  yt-live-chat-text-message-renderer #content::after { right: -99px; }
+  yt-live-chat-text-message-renderer yt-live-chat-author-chip { left: -37px !important; }
+  yt-live-chat-text-message-renderer #author-name { max-width: 360px !important; }
+  yt-live-chat-text-message-renderer #image-and-message { padding-left: 45px !important; }
+  yt-live-chat-text-message-renderer #message { font-size: 23px !important; }
 }
