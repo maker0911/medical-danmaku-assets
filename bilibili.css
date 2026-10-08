@@ -99,7 +99,7 @@ yt-live-chat-text-message-renderer #content::before {
   mask-position: 0 100%;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  animation: medical-card-rise-fade 1000ms ease-in-out both !important;
+  animation: medical-card-rise-fade 600ms ease-in-out both !important;
 }
 
 yt-live-chat-text-message-renderer #content::after {
