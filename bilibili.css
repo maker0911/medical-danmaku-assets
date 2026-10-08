@@ -20,7 +20,7 @@ yt-live-chat-text-message-renderer * {
 yt-live-chat-text-message-renderer {
   display: block !important;
   width: auto !important;
-  margin: 52px 28px 32px 42px !important;
+  margin: 52px 28px 88px 42px !important;
   padding: 0 !important;
   overflow: visible !important;
   font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif !important;
@@ -34,17 +34,17 @@ yt-live-chat-text-message-renderer #content {
   width: max-content !important;
   min-width: min(500px, 100%) !important;
   max-width: 100% !important;
-  min-height: 145px !important;
+  min-height: 115px !important;
   margin: 0 !important;
   padding: 0 !important;
   overflow: visible !important;
   box-shadow: none !important;
   background: transparent !important;
   border: solid transparent !important;
-  border-width: 50px 125px 43px 125px !important;
+  border-width: 40px 125px 38px 125px !important;
   border-image-source: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/message_base_cropped.svg") !important;
   border-image-slice: 228 567 197 568 fill !important;
-  border-image-width: 50px 125px 43px 125px !important;
+  border-image-width: 40px 125px 38px 125px !important;
   border-image-repeat: stretch !important;
 }
 
@@ -62,7 +62,7 @@ yt-live-chat-text-message-renderer #content::after {
 
 yt-live-chat-text-message-renderer #content::before {
   left: -148px;
-  top: -93px;
+  top: -83px;
   width: 158px;
   height: 201px;
   background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/iv_bag_and_tube.png");
@@ -71,7 +71,7 @@ yt-live-chat-text-message-renderer #content::before {
 
 yt-live-chat-text-message-renderer #content::after {
   right: -134px;
-  bottom: -55px;
+  bottom: -50px;
   width: 105px;
   height: 82px;
   background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/bandage.png");
@@ -113,7 +113,7 @@ yt-live-chat-text-message-renderer yt-live-chat-author-chip {
   position: absolute !important;
   z-index: 5 !important;
   left: -72px !important;
-  top: -67px !important;
+  top: -57px !important;
   display: block !important;
   width: max-content !important;
   max-width: none !important;
@@ -178,8 +178,8 @@ yt-live-chat-text-message-renderer .emoji {
 /* 窄弹幕窗口使用小一号的边框切片，端部和装饰仍保持固定尺寸。 */
 @container (max-width: 600px) {
   yt-live-chat-text-message-renderer #content {
-    border-width: 50px 90px 43px 90px !important;
-    border-image-width: 50px 90px 43px 90px !important;
+    border-width: 40px 90px 38px 90px !important;
+    border-image-width: 40px 90px 38px 90px !important;
   }
 
   yt-live-chat-text-message-renderer #content::before { left: -113px; }
