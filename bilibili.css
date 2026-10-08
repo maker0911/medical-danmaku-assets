@@ -34,7 +34,7 @@ yt-live-chat-text-message-renderer #content {
   width: max-content !important;
   min-width: min(500px, 100%) !important;
   max-width: 100% !important;
-  min-height: 166px !important;
+  min-height: 145px !important;
   margin: 0 !important;
   padding: 0 !important;
   overflow: visible !important;
