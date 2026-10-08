@@ -1,4 +1,4 @@
-/* BLiveChat 通用文字弹幕：所有用户共用一款，静态显示。 */
+/* BLiveChat 通用文字弹幕：所有用户共用一款，分层入场。 */
 
 body,
 yt-live-chat-renderer,
@@ -22,7 +22,7 @@ yt-live-chat-text-message-renderer {
   padding: 0 !important;
   overflow: visible !important;
   font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif !important;
-  animation: medical-danmaku-enter 420ms cubic-bezier(0.20, 0.80, 0.20, 1) both !important;
+  animation: medical-danmaku-enter 900ms ease-out both !important;
 }
 
 /* BLiveChat 的文字弹幕卡片是 #content，没有 #card。 */
@@ -45,6 +45,8 @@ yt-live-chat-text-message-renderer #content {
   border-image-slice: 228 567 197 568 fill !important;
   border-image-width: 40px 125px 38px 125px !important;
   border-image-repeat: stretch !important;
+  transform-origin: left center;
+  animation: medical-card-unfold 720ms cubic-bezier(0.20, 0.80, 0.20, 1) both !important;
 }
 
 /* 原始透明全画布图按 0.22 倍显示，只在固定区域露出装饰。 */
@@ -67,7 +69,7 @@ yt-live-chat-text-message-renderer #content::before {
   background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/iv_bag.png");
   background-position: -50px -39px;
   transform-origin: 44px 9px;
-  animation: medical-bag-sway 4s ease-in-out infinite !important;
+  animation: medical-bag-sway 3s ease-in-out infinite !important;
 }
 
 yt-live-chat-text-message-renderer #content::after {
@@ -78,7 +80,7 @@ yt-live-chat-text-message-renderer #content::after {
   background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/bandage.png");
   background-position: -744px -178px;
   transform-origin: center center;
-  animation: medical-bandage-settle 500ms ease-out both !important;
+  animation: medical-bandage-settle 640ms cubic-bezier(0.20, 0.80, 0.20, 1) 480ms both !important;
 }
 
 yt-live-chat-text-message-renderer #image-and-message {
@@ -105,7 +107,7 @@ yt-live-chat-text-message-renderer #image-and-message::before {
   pointer-events: none;
   background: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/iv_tube.png") -60px -158px / 901px 300px no-repeat;
   transform-origin: 50% 100%;
-  animation: medical-tube-flex 4s ease-in-out -3.8s infinite !important;
+  animation: medical-tube-flex 3s ease-in-out -2.8s infinite !important;
 }
 
 yt-live-chat-text-message-renderer #message {
@@ -125,6 +127,7 @@ yt-live-chat-text-message-renderer #message {
   white-space: pre-wrap !important;
   overflow-wrap: anywhere !important;
   text-shadow: none !important;
+  animation: medical-message-reveal 560ms ease-out 300ms both !important;
 }
 
 yt-live-chat-text-message-renderer yt-live-chat-author-chip {
@@ -138,8 +141,9 @@ yt-live-chat-text-message-renderer yt-live-chat-author-chip {
   margin: 0 !important;
   padding: 0 !important;
   background: transparent !important;
-  transform: rotate(-2.8deg) !important;
+  transform: rotate(-2.8deg);
   transform-origin: left top !important;
+  animation: medical-name-drop 740ms cubic-bezier(0.20, 0.80, 0.20, 1) 160ms both !important;
 }
 
 yt-live-chat-text-message-renderer #author-name {
@@ -212,27 +216,45 @@ yt-live-chat-text-message-renderer .emoji.blc-large-emoji {
   yt-live-chat-text-message-renderer #message { font-size: 23px !important; }
 }
 
-/* 入场只播放一次，随后仅输液袋与软管缓慢循环。 */
+/* 整条消息弹起，底图展开，昵称和正文依次出现。 */
 @keyframes medical-danmaku-enter {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0); }
+  0%   { opacity: 0; transform: translateY(32px) scale(0.94) rotate(-1.3deg); }
+  12%  { opacity: 1; }
+  60%  { transform: translateY(-7px) scale(1.025) rotate(0.35deg); }
+  80%  { transform: translateY(2px) scale(0.995) rotate(-0.15deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+}
+
+@keyframes medical-card-unfold {
+  0%   { transform: scaleX(0.78); }
+  72%  { transform: scaleX(1.025); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes medical-name-drop {
+  0%   { opacity: 0; transform: translateY(-24px) rotate(-10deg) scale(0.88); }
+  70%  { opacity: 1; transform: translateY(5px) rotate(-1deg) scale(1.04); }
+  100% { opacity: 1; transform: translateY(0) rotate(-2.8deg) scale(1); }
+}
+
+@keyframes medical-message-reveal {
+  0%   { opacity: 0; clip-path: inset(0 100% 0 0); transform: translateX(-10px); }
+  20%  { opacity: 1; }
+  100% { opacity: 1; clip-path: inset(0 0 0 0); transform: translateX(0); }
 }
 
 @keyframes medical-bag-sway {
-  0%, 100% { transform: rotate(-3deg); }
-  50%      { transform: rotate(3deg); }
+  0%, 100% { transform: rotate(-7deg); }
+  50%      { transform: rotate(7deg); }
 }
 
 @keyframes medical-tube-flex {
-  0%, 100% { transform: skewX(-4deg); }
-  50%      { transform: skewX(4deg); }
+  0%, 100% { transform: skewX(-9deg); }
+  50%      { transform: skewX(9deg); }
 }
 
 @keyframes medical-bandage-settle {
-  from { transform: rotate(8deg); }
-  to   { transform: rotate(0deg); }
-}
-
-yt-live-chat-text-message-renderer :is(#content, #image-and-message, #message, yt-live-chat-author-chip, #author-name) {
-  animation: none !important;
+  0%   { opacity: 0; transform: translateY(-25px) rotate(-22deg) scale(1.2); }
+  65%  { opacity: 1; transform: translateY(5px) rotate(5deg) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
 }
