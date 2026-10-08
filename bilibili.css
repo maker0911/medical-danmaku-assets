@@ -13,8 +13,6 @@ yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
 yt-live-chat-text-message-renderer,
 yt-live-chat-text-message-renderer * {
   box-sizing: border-box !important;
-  animation: none !important;
-  transition: none !important;
 }
 
 yt-live-chat-text-message-renderer {
@@ -24,6 +22,7 @@ yt-live-chat-text-message-renderer {
   padding: 0 !important;
   overflow: visible !important;
   font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif !important;
+  animation: medical-danmaku-enter 220ms ease-out both !important;
 }
 
 /* BLiveChat 的文字弹幕卡片是 #content，没有 #card。 */
@@ -63,10 +62,12 @@ yt-live-chat-text-message-renderer #content::after {
 yt-live-chat-text-message-renderer #content::before {
   left: -148px;
   top: -83px;
-  width: 158px;
-  height: 201px;
-  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/iv_bag_and_tube.png");
+  width: 80px;
+  height: 126px;
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/iv_bag.png");
   background-position: -50px -39px;
+  transform-origin: 44px 9px;
+  animation: medical-bag-sway 10s ease-in-out infinite !important;
 }
 
 yt-live-chat-text-message-renderer #content::after {
@@ -76,6 +77,8 @@ yt-live-chat-text-message-renderer #content::after {
   height: 82px;
   background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/bandage.png");
   background-position: -744px -178px;
+  transform-origin: center center;
+  animation: medical-bandage-settle 240ms ease-out both !important;
 }
 
 yt-live-chat-text-message-renderer #image-and-message {
@@ -88,6 +91,21 @@ yt-live-chat-text-message-renderer #image-and-message {
   border: 0 !important;
   background: transparent !important;
   overflow: visible !important;
+}
+
+/* 软管底端固定，轻微倾斜使中段产生约 1px 的位移。 */
+yt-live-chat-text-message-renderer #image-and-message::before {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  left: -138px;
+  top: 37px;
+  width: 148px;
+  height: 83px;
+  pointer-events: none;
+  background: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/iv_tube.png") -60px -158px / 901px 300px no-repeat;
+  transform-origin: 50% 100%;
+  animation: medical-tube-flex 10s ease-in-out -9.8s infinite !important;
 }
 
 yt-live-chat-text-message-renderer #message {
@@ -167,13 +185,16 @@ yt-live-chat-text-message-renderer :is(#author-photo, #chat-medal, #chat-badges,
 
 yt-live-chat-text-message-renderer .emoji {
   display: inline-block !important;
-  width: auto !important;
+  width: 1.25em !important;
   height: 1.25em !important;
+  object-fit: contain !important;
   vertical-align: -0.2em !important;
 }
 
-
-
+yt-live-chat-text-message-renderer .emoji.blc-large-emoji {
+  width: 2.5em !important;
+  height: 2.5em !important;
+}
 
 /* 窄弹幕窗口使用小一号的边框切片，端部和装饰仍保持固定尺寸。 */
 @container (max-width: 600px) {
@@ -187,5 +208,31 @@ yt-live-chat-text-message-renderer .emoji {
   yt-live-chat-text-message-renderer yt-live-chat-author-chip { left: -37px !important; }
   yt-live-chat-text-message-renderer #author-name { max-width: 360px !important; }
   yt-live-chat-text-message-renderer #image-and-message { padding-left: 45px !important; }
+  yt-live-chat-text-message-renderer #image-and-message::before { left: -103px; }
   yt-live-chat-text-message-renderer #message { font-size: 23px !important; }
+}
+
+/* 入场只播放一次，随后仅输液袋与软管缓慢循环。 */
+@keyframes medical-danmaku-enter {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes medical-bag-sway {
+  0%, 100% { transform: rotate(-0.8deg); }
+  50%      { transform: rotate(0.8deg); }
+}
+
+@keyframes medical-tube-flex {
+  0%, 100% { transform: skewX(-1.2deg); }
+  50%      { transform: skewX(1.2deg); }
+}
+
+@keyframes medical-bandage-settle {
+  from { transform: rotate(1deg); }
+  to   { transform: rotate(0deg); }
+}
+
+yt-live-chat-text-message-renderer :is(#content, #image-and-message, #message, yt-live-chat-author-chip, #author-name) {
+  animation: none !important;
 }

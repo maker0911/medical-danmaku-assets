@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BLiveChat 通用文字弹幕预览</title>
+<link rel="stylesheet" href="bilibili.css">
+<style>
+html,body { margin:0; width:100%; background:#e3edf4 !important; }
+.demo { display:flex; gap:30px; padding:20px; align-items:flex-start; }
+.column { width:900px; flex:none; }
+.column.narrow { width:490px; }
+.label { font:16px sans-serif; padding:5px; color:#53718b; }
+#items { width:100%; }
+</style>
+</head>
+<body>
+<div class="demo">
+<div class="column"><div class="label">宽 900px</div><div id="items">
+<yt-live-chat-text-message-renderer author-type=""><div id="content"><yt-live-chat-author-chip><span id="author-name">小小云</span></yt-live-chat-author-chip><span id="image-and-message"><span id="message">今天也要开心呀！</span></span></div></yt-live-chat-text-message-renderer>
+<yt-live-chat-text-message-renderer author-type="member"><div id="content"><yt-live-chat-author-chip><span id="author-name">今天也要努力的小护士</span></yt-live-chat-author-chip><span id="image-and-message"><span id="message">收到啦，谢谢你！</span></span></div></yt-live-chat-text-message-renderer>
+<yt-live-chat-text-message-renderer author-type="owner"><div id="content"><yt-live-chat-author-chip><span id="author-name">蓝莓</span></yt-live-chat-author-chip><span id="image-and-message"><span id="message">这是一条比较长的弹幕，用来看看消息底框变长以后，两端的输液袋和创可贴是否仍然保持原来的大小。换行之后，底框也会跟着变高。</span></span></div></yt-live-chat-text-message-renderer>
+</div></div>
+<div class="column narrow"><div class="label">窄 490px</div><div id="items">
+<yt-live-chat-text-message-renderer author-type=""><div id="content"><yt-live-chat-author-chip><span id="author-name">小小云</span></yt-live-chat-author-chip><span id="image-and-message"><span id="message">今天也要开心呀！</span></span></div></yt-live-chat-text-message-renderer>
+<yt-live-chat-text-message-renderer author-type="moderator"><div id="content"><yt-live-chat-author-chip><span id="author-name">很长很长的昵称要能跟着变长</span></yt-live-chat-author-chip><span id="image-and-message"><span id="message">这是一条长弹幕，窄窗口下会自动换行，底框应当跟着内容变高，装饰位置保持在两端。</span></span></div></yt-live-chat-text-message-renderer>
+</div></div>
+</div>
+<button id="replay" type="button" style="position:fixed;right:20px;bottom:20px;z-index:20;padding:10px 16px;border:1px solid #9fc9e7;border-radius:14px;background:#fff;color:#527390;font:16px sans-serif;cursor:pointer">重播入场动画</button>
+<script>
+document.querySelector("#replay").addEventListener("click", () => {
+  document.querySelectorAll("yt-live-chat-text-message-renderer").forEach((item) => {
+    item.replaceWith(item.cloneNode(true));
+  });
+});
+</script>
+</body></html>
