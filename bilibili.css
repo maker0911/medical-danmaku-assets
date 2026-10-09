@@ -1,4 +1,4 @@
-/* BLiveChat 通用文字弹幕：所有用户共用一款，分层入场。 */
+/* BLiveChat 文字弹幕：普通用户隐藏输液袋和软管，其余样式共用。 */
 
 body,
 yt-live-chat-renderer,
@@ -58,6 +58,13 @@ yt-live-chat-text-message-renderer::after {
   background-position: -60px -158px;
   transform-origin: 50% 100%;
   animation: medical-tube-flex 3s ease-in-out -2.8s infinite !important;
+}
+
+/* 普通用户可能有空 author-type，或没有该属性；舰队等级 1/2/3 始终保留装饰。 */
+yt-live-chat-text-message-renderer:is([author-type=""], :not([author-type])):not([blc-guard-level="1"]):not([blc-guard-level="2"]):not([blc-guard-level="3"])::before,
+yt-live-chat-text-message-renderer:is([author-type=""], :not([author-type])):not([blc-guard-level="1"]):not([blc-guard-level="2"]):not([blc-guard-level="3"])::after {
+  display: none !important;
+  animation: none !important;
 }
 
 /* BLiveChat 的文字弹幕卡片是 #content，没有 #card。 */
