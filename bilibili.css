@@ -160,12 +160,14 @@ yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [privilegetype="1"]
   --medical-governor-flower-extra-right: 28px;
   --medical-governor-flower-extra-top: 27px;
   --medical-governor-badge-center-shift: -9px;
-  --medical-governor-badge-vertical-position: -122px;
+  --medical-governor-badge-vertical-position: -110px;
 }
 
 /* 底框下沿的徽章与右下创可贴共用底框前景，不依赖昵称长度。 */
 yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [privilegetype="1"]) #content::after {
   width: calc(100% + 250px);
+  height: 94px;
+  bottom: -62px;
   background-image:
     url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/bandage.png"),
     url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/governor/governor_badge.png");
@@ -174,6 +176,7 @@ yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [privilegetype="1"]
     calc(100% + 52px) -178px,
     calc(50% + var(--medical-governor-badge-center-shift)) var(--medical-governor-badge-vertical-position);
   transform-origin: calc(100% - 52px) 50%;
+  animation: medical-governor-badge-fade 640ms ease-out 900ms both !important;
 }
 
 /* 旧版脚本插入的节点不再使用，避免与 CSS 装饰重复。 */
@@ -463,4 +466,10 @@ yt-live-chat-text-message-renderer .emoji.blc-large-emoji {
   0%   { opacity: 0; transform: translateY(-25px) rotate(-22deg) scale(1.2); }
   65%  { opacity: 1; transform: translateY(5px) rotate(5deg) scale(0.95); }
   100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
+}
+
+/* 总督的徽章与创可贴共用前景层，仅作透明度渐显，不再随创可贴转动。 */
+@keyframes medical-governor-badge-fade {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }

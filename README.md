@@ -12,7 +12,7 @@
 
 ## 仅总督显示的小花和徽章
 
-`governor_flower.png` 和 `governor_badge.png` 保留原始 2048×682 透明画布，放在 `assets/medical_ui_assets/slices/governor/`。小花通过右上听诊器伪元素的第二层背景局部取图，贴在听诊器外侧并跟随它入场；花在上次位置基础上再单独下移 14px，听诊器位置不变。徽章通过底框前景的第二层背景固定在下沿正中，不依赖昵称长度；原有右下创可贴仍在同一前景层。两者只匹配 `blc-guard-level="1"` 或 `privilegetype="1"`，不会出现在提督、舰长或普通用户消息上，也不需要额外 HTML 或 JS。位置可调参数集中在总督的 `#content` 规则里。`governor_diagram_overlay.png` 保留在素材目录中，但当前 CSS 不加载，奶白正文底板不显示医疗底纹。
+`governor_flower.png` 和 `governor_badge.png` 保留原始 2048×682 透明画布，放在 `assets/medical_ui_assets/slices/governor/`。小花通过右上听诊器伪元素的第二层背景局部取图，贴在听诊器外侧并跟随它入场；花在上次位置基础上再单独下移 14px，听诊器位置不变。徽章通过底框前景的第二层背景固定在下沿正中，不依赖昵称长度；它与同层的右下创可贴在总督款只做透明度渐显，不再转动。两者只匹配 `blc-guard-level="1"` 或 `privilegetype="1"`，不会出现在提督、舰长或普通用户消息上，也不需要额外 HTML 或 JS。位置可调参数集中在总督的 `#content` 规则里。`governor_diagram_overlay.png` 保留在素材目录中，但当前 CSS 不加载，奶白正文底板不显示医疗底纹。
 
 只需在三个平台的自定义 CSS 输入框粘贴完整 `bilibili.css`。旧版 `bilibili-guard-decorations.js` 不再需要；如果已有页面仍加载它，CSS 会隐藏它插入的旧装饰节点，避免重复。
 
