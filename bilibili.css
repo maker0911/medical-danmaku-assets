@@ -92,6 +92,8 @@ yt-live-chat-text-message-renderer #content::before {
   z-index: 0;
   inset: -40px -125px -38px -125px;
   pointer-events: none;
+  /* 彗星号内嵌预览若丢失 border-image 的中间 fill，仍保留完整的正文底色。 */
+  background: linear-gradient(180deg, #fdfbf7 0%, #fcfaf5 48%, #f3f0ed 100%) padding-box;
   border: solid transparent;
   border-width: 40px 125px 38px 125px;
   border-image-source: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/message_base_cropped_25.png");
