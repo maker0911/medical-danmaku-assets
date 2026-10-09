@@ -85,21 +85,40 @@ yt-live-chat-text-message-renderer #content {
   border-width: 40px 125px 38px 125px !important;
 }
 
-/* 兼容 PNG 九宫格底框直接挂在 #content 上，独立做纵向渐显。 */
+/* 九块 PNG 背景直接拼在 #content 上，避开彗星号预览对 border-image 的漏绘。 */
 yt-live-chat-text-message-renderer #content::before {
+  --medical-card-edge-width: 125px;
+  --medical-card-middle-width: calc(100% - 250px);
   content: "";
   position: absolute;
   z-index: 0;
   inset: -40px -125px -38px -125px;
   pointer-events: none;
-  /* 彗星号内嵌预览若丢失 border-image 的中间 fill，仍保留完整的正文底色。 */
-  background: linear-gradient(180deg, #fdfbf7 0%, #fcfaf5 48%, #f3f0ed 100%) padding-box;
-  border: solid transparent;
-  border-width: 40px 125px 38px 125px;
-  border-image-source: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/message_base_cropped_25.png");
-  border-image-slice: 57 142 49 142 fill;
-  border-image-width: 40px 125px 38px 125px;
-  border-image-repeat: stretch;
+  background-image:
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/top_left.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/top_center.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/top_right.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/middle_left.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/middle_center.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/middle_right.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/bottom_left.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/bottom_center.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/bottom_right.png");
+  background-size:
+    var(--medical-card-edge-width) 40px,
+    var(--medical-card-middle-width) 40px,
+    var(--medical-card-edge-width) 40px,
+    var(--medical-card-edge-width) calc(100% - 76px),
+    var(--medical-card-middle-width) calc(100% - 76px),
+    var(--medical-card-edge-width) calc(100% - 76px),
+    var(--medical-card-edge-width) 38px,
+    var(--medical-card-middle-width) 38px,
+    var(--medical-card-edge-width) 38px;
+  background-position:
+    left top, center top, right top,
+    left center, center center, right center,
+    left bottom, center bottom, right bottom;
+  background-repeat: no-repeat;
   -webkit-clip-path: inset(100% 0 0 0);
   clip-path: inset(100% 0 0 0);
   animation: medical-card-rise-fade 600ms ease-in-out both !important;
@@ -293,9 +312,9 @@ yt-live-chat-text-message-renderer .emoji.blc-large-emoji {
 
   yt-live-chat-text-message-renderer #content::after { right: -99px; }
   yt-live-chat-text-message-renderer #content::before {
+    --medical-card-edge-width: 90px;
+    --medical-card-middle-width: calc(100% - 180px);
     inset: -40px -90px -38px -90px;
-    border-width: 40px 90px 38px 90px;
-    border-image-width: 40px 90px 38px 90px;
   }
   yt-live-chat-text-message-renderer yt-live-chat-author-chip { left: -37px !important; }
   yt-live-chat-text-message-renderer #author-name { max-width: 360px !important; }
@@ -314,9 +333,9 @@ yt-live-chat-text-message-renderer .emoji.blc-large-emoji {
   }
   yt-live-chat-text-message-renderer #content::after { right: -99px; }
   yt-live-chat-text-message-renderer #content::before {
+    --medical-card-edge-width: 90px;
+    --medical-card-middle-width: calc(100% - 180px);
     inset: -40px -90px -38px -90px;
-    border-width: 40px 90px 38px 90px;
-    border-image-width: 40px 90px 38px 90px;
   }
   yt-live-chat-text-message-renderer yt-live-chat-author-chip { left: -37px !important; }
   yt-live-chat-text-message-renderer #author-name { max-width: 360px !important; }

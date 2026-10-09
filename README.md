@@ -2,7 +2,7 @@
 
 三处共用完整样式 `bilibili.css`，只应用于用户发送的文字弹幕。彗星号的旧版 BLiveChat 结构在 `#content` 外有 `#card`，等级属性是 `privilegetype`；新版本使用 `blc-guard-level`。样式和装饰脚本同时兼容两种属性。
 
-彗星号预览曾出现底框只剩白条、昵称只露出一角。现在底框使用从原画面裁出的 PNG 九宫格，底框和昵称的入场揭示改用 `clip-path`；原来的 600ms / 1500ms 时长和移动方向保留。彗星号内嵌预览若没有绘制九宫格的中间填充，底框伪元素会用相近的浅色渐变填补正文区域，边缘仍使用原图。窄窗口除了容器查询还有视口宽度回退规则，供较旧网页内核使用。
+彗星号预览曾漏绘底框九宫格的中央和左右边片。现在底框把同一张原图精确裁成九块 PNG，以九层 CSS 背景拼接；中央随文字伸缩，四角及边框厚度固定，不再依赖 `border-image`。底框和昵称的入场揭示使用 `clip-path`；原来的 600ms / 1500ms 时长和移动方向保留。窄窗口除了容器查询还有视口宽度回退规则，供较旧网页内核使用。
 
 ## 舰队等级静态装饰
 
@@ -16,7 +16,7 @@
 <script src="./bilibili-guard-decorations.js"></script>
 ```
 
-本地 `bilibili-universal-preview.html` 和 `huixinghao-compat-preview.html` 都已引入脚本，分别模拟没有 `#card` 的新结构与带 `#card`、`privilegetype` 的旧结构；两者都是静态预览，不接收直播弹幕。BLiveChat 自定义 HTML 模板还需要按官方模板接口接收并渲染消息。两张等级素材位于 `assets/medical_ui_assets/canvas/`，兼容底框位于 `assets/medical_ui_assets/slices/message_base_cropped_25.png`；CSS 中使用公开仓库的 PNG 地址。
+本地 `bilibili-universal-preview.html` 和 `huixinghao-compat-preview.html` 都已引入脚本，分别模拟没有 `#card` 的新结构与带 `#card`、`privilegetype` 的旧结构；两者都是静态预览，不接收直播弹幕。BLiveChat 自定义 HTML 模板还需要按官方模板接口接收并渲染消息。两张等级素材位于 `assets/medical_ui_assets/canvas/`，底框九块 PNG 位于 `assets/medical_ui_assets/slices/card9/`；CSS 中使用公开仓库的 PNG 地址。
 
 普通用户不显示输液袋和软管；舰长、提督、总督和房管保留。主播也保留现有装饰。消息底框、昵称框、创可贴和文字布局对所有用户相同。
 
