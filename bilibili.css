@@ -126,6 +126,58 @@ yt-live-chat-text-message-renderer #content::after {
   animation: medical-bandage-settle 640ms cubic-bezier(0.20, 0.80, 0.20, 1) 900ms both !important;
 }
 
+/* 舰长 3、提督 2、总督 1 共用两张静态装饰。参数集中在这里。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [blc-guard-level="3"]) #content {
+  --medical-guard-decor-scale: 0.22;
+  --medical-scope-right: -112px;
+  --medical-scope-top: -58px;
+  --medical-ecg-right: 14px;
+  --medical-ecg-bottom: -30px;
+}
+
+/* 两个节点由 bilibili-guard-decorations.js 加到 #content，原画布只露出图案区域。 */
+yt-live-chat-text-message-renderer #content > .medical-guard-decoration {
+  position: absolute !important;
+  z-index: 0 !important;
+  display: block !important;
+  flex: none !important;
+  max-width: none !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+  background-repeat: no-repeat !important;
+  background-size: 2048px 682px !important;
+  pointer-events: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+yt-live-chat-text-message-renderer #content > .medical-guard-stethoscope {
+  top: var(--medical-scope-top) !important;
+  right: var(--medical-scope-right) !important;
+  width: 360px !important;
+  height: 247px !important;
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/stethoscope_gauze.png") !important;
+  background-position: -1668px -64px !important;
+  transform: scale(var(--medical-guard-decor-scale)) !important;
+  transform-origin: top right !important;
+}
+
+yt-live-chat-text-message-renderer #content > .medical-guard-ecg {
+  right: var(--medical-ecg-right) !important;
+  bottom: var(--medical-ecg-bottom) !important;
+  width: 352px !important;
+  height: 54px !important;
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/ecg_line.png") !important;
+  background-position: -1405px -521px !important;
+  transform: scale(var(--medical-guard-decor-scale)) !important;
+  transform-origin: bottom right !important;
+}
+
+yt-live-chat-text-message-renderer:not([blc-guard-level="1"]):not([blc-guard-level="2"]):not([blc-guard-level="3"]) #content > .medical-guard-decoration {
+  display: none !important;
+}
+
 yt-live-chat-text-message-renderer #image-and-message {
   position: relative !important;
   display: block !important;
@@ -260,6 +312,9 @@ yt-live-chat-text-message-renderer .emoji.blc-large-emoji {
   yt-live-chat-text-message-renderer #image-and-message { padding-left: 45px !important; }
   yt-live-chat-text-message-renderer #content > #message { padding-left: 45px !important; }
   yt-live-chat-text-message-renderer #message { font-size: 23px !important; }
+  yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [blc-guard-level="3"]) #content {
+    --medical-scope-right: -77px;
+  }
 }
 
 /* 整条消息弹起，底框从下向上渐显，昵称从左向右渐显。 */

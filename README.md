@@ -1,6 +1,20 @@
 # BLiveChat 医疗风文字弹幕
 
-当前可用版本是 bilibili.css。把完整内容粘贴到 BLiveChat 的自定义 CSS 中，再刷新测试页。素材已放在公开仓库，CSS 内的图片链接可以直接加载。此样式只应用于用户发送的文字弹幕。
+当前可用样式是 `bilibili.css`。把完整内容粘贴到 BLiveChat 的自定义 CSS 中，再刷新测试页。此样式只应用于用户发送的文字弹幕。
+
+## 舰队等级静态装饰
+
+文字弹幕使用 BLiveChat 已有的 `blc-guard-level` 属性判断等级：`0` 为普通用户、`3` 为舰长、`2` 为提督、`1` 为总督。舰长、提督、总督共用一组听诊器＋纱布和一条心电线；普通用户没有这两张图。房管和主播只有在同时具有 1/2/3 级属性时才显示新增装饰。等级不从昵称推断。
+
+两张 PNG 保留 2048×682 原画布。CSS 分别只显示听诊器的 `(1668,64,360,247)` 和心电线的 `(1405,521,352,54)`，并按统一比例缩放。装饰定位在消息底框 `#content` 的右上、右下；不会参与文字排版。调节 `bilibili.css` 中的 `--medical-guard-decor-scale`、`--medical-scope-right`、`--medical-scope-top`、`--medical-ecg-right`、`--medical-ecg-bottom` 即可微调。窄窗口另有 `--medical-scope-right` 覆盖值。
+
+现有 `::before` / `::after` 已用于底框、输液袋、软管和创可贴，因此这两张图需要 `bilibili-guard-decorations.js` 给每条 1/2/3 级文字弹幕的 `#content` 添加两个空节点。**仅在 BLiveChat 的自定义 CSS 输入框粘贴 CSS，不会执行该 JS，也就不会出现新增装饰。**若使用支持 JS 的自定义 HTML 模板，在页面结束前引入同目录脚本：
+
+```html
+<script src="./bilibili-guard-decorations.js"></script>
+```
+
+本地 `bilibili-universal-preview.html` 已引入脚本，可直接打开检查四种等级；它是静态预览，不接收直播弹幕。BLiveChat 自定义 HTML 模板还需要按官方模板接口接收并渲染消息。两张新素材文件位于 `assets/medical_ui_assets/canvas/`，CSS 中使用公开仓库的实际 PNG 地址。
 
 普通用户不显示输液袋和软管；舰长、提督、总督和房管保留。主播也保留现有装饰。消息底框、昵称框、创可贴和文字布局对所有用户相同。
 
