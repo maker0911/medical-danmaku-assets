@@ -10,9 +10,13 @@
 
 原素材保留 2048×682 画布；实际使用的 PNG 已按图案范围裁成 360×247 的听诊器＋纱布和 352×54 的心电线。听诊器显示为 79×54px，心电线放大到 116×18px；两者用正文包装层的伪元素定位在消息底框右上、右下，不参与文字排版。调节 `bilibili.css` 中的 `--medical-scope-width`、`--medical-scope-height`、`--medical-scope-right`、`--medical-scope-top`、`--medical-ecg-width`、`--medical-ecg-height`、`--medical-ecg-right`、`--medical-ecg-bottom` 即可微调。窄窗口另有 `--medical-scope-right` 覆盖值。
 
+## 仅总督显示的三张新素材
+
+`governor_diagram_overlay.png`、`governor_flower.png`、`governor_badge.png` 保留原始 2048×682 透明画布，放在 `assets/medical_ui_assets/slices/governor/`。底纹作为底框九块 PNG 上方、正文下方的第十层背景，沿底框宽度等比缩放；素材本身已很淡，文字仍清楚可读。小花通过右上听诊器伪元素的第二层背景局部取图，贴在听诊器外侧并跟随它入场。徽章通过底框前景的第二层背景固定在下沿正中，不依赖昵称长度；原有右下创可贴仍在同一前景层。三者只匹配 `blc-guard-level="1"` 或 `privilegetype="1"`，不会出现在提督、舰长或普通用户消息上，也不需要额外 HTML 或 JS。位置可调参数集中在总督的 `#content` 规则里。
+
 只需在三个平台的自定义 CSS 输入框粘贴完整 `bilibili.css`。旧版 `bilibili-guard-decorations.js` 不再需要；如果已有页面仍加载它，CSS 会隐藏它插入的旧装饰节点，避免重复。
 
-本地 `bilibili-universal-preview.html` 左列的提督、总督消息模拟 BLiveChat 实际的 `#content > #message` 结构，其余示例保留包装层；`huixinghao-compat-preview.html` 模拟带 `#card`、`privilegetype` 的旧结构。两者都是不执行装饰脚本的静态预览，不接收直播弹幕。BLiveChat 自定义 HTML 模板还需要按官方模板接口接收并渲染消息。裁好的等级素材位于 `assets/medical_ui_assets/slices/guard2/`，底框九块 PNG 位于 `assets/medical_ui_assets/slices/card9/`，昵称三块 PNG 位于 `assets/medical_ui_assets/slices/name3/`；CSS 中使用公开仓库的 PNG 地址。
+本地 `bilibili-universal-preview.html` 左列的提督、总督消息模拟 BLiveChat 实际的 `#content > #message` 结构，右列总督示例保留小fa朵使用的包装层；`huixinghao-compat-preview.html` 模拟带 `#card`、`privilegetype` 的旧结构。两者都是不执行装饰脚本的静态预览，不接收直播弹幕。BLiveChat 自定义 HTML 模板还需要按官方模板接口接收并渲染消息。裁好的等级素材位于 `assets/medical_ui_assets/slices/guard2/`，底框九块 PNG 位于 `assets/medical_ui_assets/slices/card9/`，昵称三块 PNG 位于 `assets/medical_ui_assets/slices/name3/`；CSS 中使用公开仓库的 PNG 地址。
 
 普通用户不显示输液袋和软管；舰长、提督、总督和房管保留。主播也保留现有装饰。消息底框、昵称框、创可贴和文字布局对所有用户相同。
 

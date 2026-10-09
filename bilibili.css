@@ -69,6 +69,7 @@ yt-live-chat-text-message-renderer:is([author-type=""], :not([author-type])):not
 
 /* 三种页面都以 #content 承载文字卡片；彗星号另有一层 #card 包装。 */
 yt-live-chat-text-message-renderer #content {
+  --medical-governor-diagram-image: none;
   position: relative !important;
   isolation: isolate;
   display: block !important;
@@ -95,6 +96,7 @@ yt-live-chat-text-message-renderer #content::before {
   inset: -40px -125px -38px -125px;
   pointer-events: none;
   background-image:
+    var(--medical-governor-diagram-image),
     url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/top_left.png"),
     url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/top_center.png"),
     url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/top_right.png"),
@@ -105,6 +107,7 @@ yt-live-chat-text-message-renderer #content::before {
     url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/bottom_center.png"),
     url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/bottom_right.png");
   background-size:
+    calc(100% + 60px) auto,
     var(--medical-card-edge-width) 40px,
     var(--medical-card-middle-width) 40px,
     var(--medical-card-edge-width) 40px,
@@ -115,6 +118,7 @@ yt-live-chat-text-message-renderer #content::before {
     var(--medical-card-middle-width) 38px,
     var(--medical-card-edge-width) 38px;
   background-position:
+    center center,
     left top, center top, right top,
     left center, center center, right center,
     left bottom, center bottom, right bottom;
@@ -153,6 +157,30 @@ yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2
   --medical-ecg-bottom: -30px;
 }
 
+/* 总督专属：底纹仍在九块底板上方、文字下方；其他尺寸只影响自身素材。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [privilegetype="1"]) #content {
+  --medical-governor-diagram-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/governor/governor_diagram_overlay.png");
+  --medical-governor-flower-box-width: 240px;
+  --medical-governor-flower-box-height: 130px;
+  --medical-governor-flower-extra-right: 28px;
+  --medical-governor-flower-extra-top: 27px;
+  --medical-governor-badge-center-shift: -9px;
+  --medical-governor-badge-vertical-position: -122px;
+}
+
+/* 底框下沿的徽章与右下创可贴共用底框前景，不依赖昵称长度。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [privilegetype="1"]) #content::after {
+  width: calc(100% + 250px);
+  background-image:
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/bandage.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/governor/governor_badge.png");
+  background-size: 901px 300px, 676px 225px;
+  background-position:
+    calc(100% + 52px) -178px,
+    calc(50% + var(--medical-governor-badge-center-shift)) var(--medical-governor-badge-vertical-position);
+  transform-origin: calc(100% - 52px) 50%;
+}
+
 /* 旧版脚本插入的节点不再使用，避免与 CSS 装饰重复。 */
 yt-live-chat-text-message-renderer #content > .medical-guard-decoration {
   display: none !important;
@@ -181,6 +209,19 @@ yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2
   -webkit-clip-path: none !important;
   clip-path: none !important;
   animation: medical-scope-float-in 1050ms ease-in-out 300ms both !important;
+}
+
+/* 总督的小花贴在听诊器组合右侧，按原始透明画布局部取图。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [privilegetype="1"]) :is(#image-and-message, #content > #message)::before {
+  top: calc(var(--medical-scope-top) - var(--medical-governor-flower-extra-top)) !important;
+  right: calc(var(--medical-scope-right) - var(--medical-governor-flower-extra-right)) !important;
+  width: var(--medical-governor-flower-box-width) !important;
+  height: var(--medical-governor-flower-box-height) !important;
+  background-image:
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/governor/governor_flower.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/guard2/stethoscope_gauze.png") !important;
+  background-size: 670px 223px, var(--medical-scope-width) var(--medical-scope-height) !important;
+  background-position: -431px -37px, 133px 27px !important;
 }
 
 yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) :is(#image-and-message, #content > #message)::after {
