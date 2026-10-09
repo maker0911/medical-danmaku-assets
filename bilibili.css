@@ -278,12 +278,14 @@ yt-live-chat-text-message-renderer #author-name::before {
   position: absolute;
   z-index: -1;
   inset: 0;
-  border: solid transparent;
-  border-width: 0 120px 0 59px;
-  border-image-source: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/nickname_normalized.png");
-  border-image-slice: 0 544 0 266 fill;
-  border-image-width: 0 120px 0 59px;
-  border-image-repeat: stretch;
+  /* 三段独立 PNG：十字固定，中央延长，圆角和蓝色尾片固定。 */
+  background-image:
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/name3/left.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/name3/right.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/name3/middle.png");
+  background-size: 59px 53px, 120px 53px, calc(100% - 177px) 53px;
+  background-position: left top, right top, 58px top;
+  background-repeat: no-repeat;
   pointer-events: none;
 }
 
