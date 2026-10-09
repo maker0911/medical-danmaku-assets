@@ -17,7 +17,8 @@
     const content = host.querySelector('#content');
     if (!content) return;
 
-    const isGuard = GUARD_LEVELS.has(host.getAttribute('blc-guard-level'));
+    const level = host.getAttribute('blc-guard-level') ?? host.getAttribute('privilegetype');
+    const isGuard = GUARD_LEVELS.has(level);
     for (const className of DECORATIONS) {
       const existing = findDecoration(content, className);
       if (!isGuard) {
@@ -57,7 +58,7 @@
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ['blc-guard-level'],
+      attributeFilter: ['blc-guard-level', 'privilegetype'],
     });
   }
 
