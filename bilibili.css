@@ -156,7 +156,7 @@ yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2
 /* 总督专属的小花、下沿徽章位置参数。 */
 yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [privilegetype="1"]) #content {
   --medical-governor-flower-box-width: 240px;
-  --medical-governor-flower-box-height: 130px;
+  --medical-governor-flower-box-height: 145px;
   --medical-governor-flower-extra-right: 28px;
   --medical-governor-flower-extra-top: 27px;
   --medical-governor-badge-center-shift: -9px;
@@ -216,7 +216,7 @@ yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [privilegetype="1"]
     url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/governor/governor_flower.png"),
     url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/guard2/stethoscope_gauze.png") !important;
   background-size: 670px 223px, var(--medical-scope-width) var(--medical-scope-height) !important;
-  background-position: -431px -23px, 133px 27px !important;
+  background-position: -431px -9px, 133px 27px !important;
 }
 
 yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) :is(#image-and-message, #content > #message)::after {
