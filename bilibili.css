@@ -231,6 +231,20 @@ yt-live-chat-text-message-renderer #message {
   animation: medical-message-reveal 560ms ease-out 620ms both !important;
 }
 
+/* BLiveChat 的 #message 直接承载贴图伪元素。原入场动画的 clip-path
+   在结束后仍裁掉框外贴图，因此仅对提督/总督的直连正文改用无裁切渐显。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) #content > #message {
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+  animation: medical-message-reveal-unclipped 560ms ease-out 620ms both !important;
+}
+
+/* 待正文整体显现后再播放贴图自身动画，避免被正文的透明度盖住。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) #content > #message::before,
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) #content > #message::after {
+  animation-delay: 760ms !important;
+}
+
 yt-live-chat-text-message-renderer yt-live-chat-author-chip {
   position: absolute !important;
   z-index: 5 !important;
@@ -373,6 +387,12 @@ yt-live-chat-text-message-renderer .emoji.blc-large-emoji {
   0%   { opacity: 0; clip-path: inset(0 100% 0 0); transform: translateX(-10px); }
   20%  { opacity: 1; }
   100% { opacity: 1; clip-path: inset(0 0 0 0); transform: translateX(0); }
+}
+
+@keyframes medical-message-reveal-unclipped {
+  0%   { opacity: 0; transform: translateX(-10px); }
+  20%  { opacity: 1; }
+  100% { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes medical-ecg-reveal {

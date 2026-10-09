@@ -12,7 +12,7 @@
 
 只需在三个平台的自定义 CSS 输入框粘贴完整 `bilibili.css`。旧版 `bilibili-guard-decorations.js` 不再需要；如果已有页面仍加载它，CSS 会隐藏它插入的旧装饰节点，避免重复。
 
-本地 `bilibili-universal-preview.html` 和 `huixinghao-compat-preview.html` 分别模拟没有 `#card` 的新结构与带 `#card`、`privilegetype` 的旧结构；两者都是不执行装饰脚本的静态预览，不接收直播弹幕。BLiveChat 自定义 HTML 模板还需要按官方模板接口接收并渲染消息。裁好的等级素材位于 `assets/medical_ui_assets/slices/guard2/`，底框九块 PNG 位于 `assets/medical_ui_assets/slices/card9/`，昵称三块 PNG 位于 `assets/medical_ui_assets/slices/name3/`；CSS 中使用公开仓库的 PNG 地址。
+本地 `bilibili-universal-preview.html` 左列的提督、总督消息模拟 BLiveChat 实际的 `#content > #message` 结构，其余示例保留包装层；`huixinghao-compat-preview.html` 模拟带 `#card`、`privilegetype` 的旧结构。两者都是不执行装饰脚本的静态预览，不接收直播弹幕。BLiveChat 自定义 HTML 模板还需要按官方模板接口接收并渲染消息。裁好的等级素材位于 `assets/medical_ui_assets/slices/guard2/`，底框九块 PNG 位于 `assets/medical_ui_assets/slices/card9/`，昵称三块 PNG 位于 `assets/medical_ui_assets/slices/name3/`；CSS 中使用公开仓库的 PNG 地址。
 
 普通用户不显示输液袋和软管；舰长、提督、总督和房管保留。主播也保留现有装饰。消息底框、昵称框、创可贴和文字布局对所有用户相同。
 
@@ -25,7 +25,7 @@
 - 整条消息：900ms 内从下方弹起，轻微放大回弹，只播放一次。
 - 消息底图：直接挂在文字弹幕的 `#content` 上，保持预先算好的尺寸，在 600ms 内从下向上裁切渐显。
 - 昵称框和昵称：一起从左向右渐显，1500ms，稍晚开始。
-- 正文：底图显露后从左向右出现，正常换行。
+- 正文：底图显露后从左向右出现，正常换行。提督、总督的直连 `#message` 用无裁切渐显，避免框外贴图被正文动画裁掉。
 - 输液袋：绕顶部吊孔额外摆动 ±7°，3 秒往复循环。
 - 软管：独立图层，底端固定，中段位移约 ±6px，较输液袋滞后约 0.2 秒。
 - 创可贴：最后从上方落下，旋转贴合，640ms，只播放一次。
