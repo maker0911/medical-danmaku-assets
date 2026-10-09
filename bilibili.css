@@ -178,6 +178,7 @@ yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2
   width: var(--medical-scope-width) !important;
   height: var(--medical-scope-height) !important;
   background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/guard2/stethoscope_gauze.png") !important;
+  animation: medical-scope-diagonal-reveal 1050ms ease-in-out 300ms both !important;
 }
 
 yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) :is(#image-and-message, #content > #message)::after {
@@ -376,6 +377,28 @@ yt-live-chat-text-message-renderer .emoji.blc-large-emoji {
   0%   { opacity: 0; -webkit-clip-path: inset(0 100% 0 0); clip-path: inset(0 100% 0 0); }
   55%  { opacity: 0.7; }
   100% { opacity: 1; -webkit-clip-path: inset(0 0 0 0); clip-path: inset(0 0 0 0); }
+}
+
+/* 从右上角沿对角线逐步露出听诊器，最终停在原有定位。 */
+@keyframes medical-scope-diagonal-reveal {
+  0% {
+    opacity: 0;
+    transform: translate(10px, -10px);
+    -webkit-clip-path: polygon(100% 0, 100% 0, 100% 0, 100% 0);
+    clip-path: polygon(100% 0, 100% 0, 100% 0, 100% 0);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translate(4px, -4px);
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 0);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
 }
 
 @keyframes medical-bag-sway {
