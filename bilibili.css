@@ -143,54 +143,49 @@ yt-live-chat-text-message-renderer #content::after {
 
 /* 舰长 3、提督 2、总督 1 共用两张静态装饰。参数集中在这里。 */
 yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [blc-guard-level="3"], [privilegetype="1"], [privilegetype="2"], [privilegetype="3"]) #content {
-  --medical-guard-decor-scale: 0.22;
+  --medical-scope-width: 79px;
+  --medical-scope-height: 54px;
   --medical-scope-right: -112px;
   --medical-scope-top: -58px;
+  --medical-ecg-width: 77px;
+  --medical-ecg-height: 12px;
   --medical-ecg-right: 14px;
   --medical-ecg-bottom: -30px;
 }
 
-/* 两个节点由 bilibili-guard-decorations.js 加到 #content，原画布只露出图案区域。 */
+/* 旧版脚本插入的节点不再使用，避免与 CSS 装饰重复。 */
 yt-live-chat-text-message-renderer #content > .medical-guard-decoration {
+  display: none !important;
+}
+
+/* 正文包装层的边缘与 #content 内容区重合，可用伪元素直接锚定底框。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [blc-guard-level="3"], [privilegetype="1"], [privilegetype="2"], [privilegetype="3"]) :is(#image-and-message, #content > #message)::before,
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [blc-guard-level="3"], [privilegetype="1"], [privilegetype="2"], [privilegetype="3"]) :is(#image-and-message, #content > #message)::after {
+  content: "";
   position: absolute !important;
   z-index: 0 !important;
   display: block !important;
-  flex: none !important;
-  max-width: none !important;
-  padding: 0 !important;
-  border: 0 !important;
-  overflow: hidden !important;
-  background-repeat: no-repeat !important;
-  background-size: 2048px 682px !important;
   pointer-events: none !important;
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
   animation: none !important;
   transition: none !important;
 }
 
-yt-live-chat-text-message-renderer #content > .medical-guard-stethoscope {
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [blc-guard-level="3"], [privilegetype="1"], [privilegetype="2"], [privilegetype="3"]) :is(#image-and-message, #content > #message)::before {
   top: var(--medical-scope-top) !important;
   right: var(--medical-scope-right) !important;
-  width: 360px !important;
-  height: 247px !important;
-  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/stethoscope_gauze.png") !important;
-  background-position: -1668px -64px !important;
-  transform: scale(var(--medical-guard-decor-scale)) !important;
-  transform-origin: top right !important;
+  width: var(--medical-scope-width) !important;
+  height: var(--medical-scope-height) !important;
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/guard2/stethoscope_gauze.png") !important;
 }
 
-yt-live-chat-text-message-renderer #content > .medical-guard-ecg {
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [blc-guard-level="3"], [privilegetype="1"], [privilegetype="2"], [privilegetype="3"]) :is(#image-and-message, #content > #message)::after {
   right: var(--medical-ecg-right) !important;
   bottom: var(--medical-ecg-bottom) !important;
-  width: 352px !important;
-  height: 54px !important;
-  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/ecg_line.png") !important;
-  background-position: -1405px -521px !important;
-  transform: scale(var(--medical-guard-decor-scale)) !important;
-  transform-origin: bottom right !important;
-}
-
-yt-live-chat-text-message-renderer:not([blc-guard-level="1"]):not([blc-guard-level="2"]):not([blc-guard-level="3"]):not([privilegetype="1"]):not([privilegetype="2"]):not([privilegetype="3"]) #content > .medical-guard-decoration {
-  display: none !important;
+  width: var(--medical-ecg-width) !important;
+  height: var(--medical-ecg-height) !important;
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/guard2/ecg_line.png") !important;
 }
 
 yt-live-chat-text-message-renderer #image-and-message {
