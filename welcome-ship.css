@@ -39,8 +39,6 @@ yt-live-chat-membership-item-renderer #card {
     var(--welcome-accents-other),
     var(--welcome-accents-right),
     var(--welcome-accents-left),
-    var(--welcome-cross-right),
-    var(--welcome-cross-left),
     var(--welcome-ecg),
     var(--welcome-backplates) !important;
   background-position: center top !important;
@@ -52,7 +50,9 @@ yt-live-chat-membership-item-renderer #card {
 yt-live-chat-membership-item-renderer #card::before,
 yt-live-chat-membership-item-renderer #card::after,
 yt-live-chat-membership-item-renderer #header::before,
-yt-live-chat-membership-item-renderer #header::after {
+yt-live-chat-membership-item-renderer #header::after,
+yt-live-chat-membership-item-renderer #header-content::before,
+yt-live-chat-membership-item-renderer #header-content::after {
   content: "";
   position: absolute !important;
   top: 0 !important;
@@ -108,7 +108,30 @@ yt-live-chat-membership-item-renderer #header::after {
   animation: medical-welcome-bandage 560ms ease-out 850ms both !important;
 }
 
-yt-live-chat-membership-item-renderer #header-content,
+/* 两枚十字单独占据原画布坐标，分别从中心轻弹出来。 */
+yt-live-chat-membership-item-renderer #header-content {
+  position: static !important;
+  background: transparent !important;
+}
+
+yt-live-chat-membership-item-renderer #header-content::before {
+  z-index: 3;
+  background-image: var(--welcome-cross-left) !important;
+  transform-origin: 10.1% 51.3%;
+  animation:
+    medical-welcome-cross-pop 650ms cubic-bezier(.2,1.3,.35,1) 720ms both,
+    medical-welcome-cross-float-left 3.6s ease-in-out 1500ms infinite !important;
+}
+
+yt-live-chat-membership-item-renderer #header-content::after {
+  z-index: 3;
+  background-image: var(--welcome-cross-right) !important;
+  transform-origin: 91.5% 53.2%;
+  animation:
+    medical-welcome-cross-pop 650ms cubic-bezier(.2,1.3,.35,1) 940ms both,
+    medical-welcome-cross-float-right 3.6s ease-in-out 1720ms infinite !important;
+}
+
 yt-live-chat-membership-item-renderer #header-content-primary-column,
 yt-live-chat-membership-item-renderer #header-content-inner-column {
   position: relative !important;
@@ -154,12 +177,30 @@ yt-live-chat-membership-item-renderer #timestamp {
   to   { opacity: 1; transform: translate(0, 0) rotate(0); }
 }
 
+@keyframes medical-welcome-cross-pop {
+  0%   { opacity: 0; transform: scale(.65) rotate(-8deg); }
+  70%  { opacity: 1; transform: scale(1.08) rotate(2deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes medical-welcome-cross-float-left {
+  0%, 100% { transform: translateY(0) rotate(0) scale(1); }
+  45%      { transform: translateY(-3px) rotate(-3deg) scale(1.04); }
+}
+
+@keyframes medical-welcome-cross-float-right {
+  0%, 100% { transform: translateY(0) rotate(0) scale(1); }
+  55%      { transform: translateY(-3px) rotate(3deg) scale(1.04); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   yt-live-chat-membership-item-renderer #card,
   yt-live-chat-membership-item-renderer #card::before,
   yt-live-chat-membership-item-renderer #card::after,
   yt-live-chat-membership-item-renderer #header::before,
-  yt-live-chat-membership-item-renderer #header::after {
+  yt-live-chat-membership-item-renderer #header::after,
+  yt-live-chat-membership-item-renderer #header-content::before,
+  yt-live-chat-membership-item-renderer #header-content::after {
     animation: none !important;
   }
 }

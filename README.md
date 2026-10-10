@@ -2,7 +2,7 @@
 
 ## 上舰装饰
 
-`bilibili.css` 现包含独立的“欢迎上舰”装饰，只匹配 `yt-live-chat-membership-item-renderer` 上舰通知，不改文字弹幕、礼物或 SC。13 张 `welcome_layers_13.zip` 素材已解压到 `assets/welcome_layers_13/`；它们都是 2048×682 的同坐标透明画布，按原位叠合并等比缩放。背景和小装饰先出现，标题随后轻弹入场，左侧输液袋、右侧听诊器从两边渐显，右下创可贴最后落位。用户名和原有上舰说明保留在图案下方，舰长、提督、总督购买通知共用此款。
+`bilibili.css` 现包含独立的“欢迎上舰”装饰，只匹配 `yt-live-chat-membership-item-renderer` 上舰通知，不改文字弹幕、礼物或 SC。13 张 `welcome_layers_13.zip` 素材已解压到 `assets/welcome_layers_13/`；它们都是 2048×682 的同坐标透明画布，按原位叠合并等比缩放。背景和小装饰先出现，标题随后轻弹入场，左侧输液袋、右侧听诊器从两边渐显，右下创可贴最后落位。左右两个小加号依次轻弹出现，之后各自缓慢上下悬浮并轻微摇摆。用户名和原有上舰说明保留在图案下方，舰长、提督、总督购买通知共用此款。
 
 打开 `welcome-ship-preview.html` 可看宽版、窄弹幕栏效果并重播动画。`welcome-ship.css` 是这部分的独立 CSS，已同步附加到完整的 `bilibili.css`；粘贴完整 CSS 时不用再次粘贴独立文件。图片使用公开仓库固定版本的绝对 URL，预览页则改用本地图片路径。上舰通知的 BLiveChat 标签和内部 `#card`、`#header` 来自其官方 CSS 参考；小fa朵若复用同结构便会匹配，需在平台预览确认。
 
