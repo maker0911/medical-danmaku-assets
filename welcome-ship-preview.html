@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>欢迎上舰 · 分层动画预览</title>
+  <link rel="stylesheet" href="welcome-ship.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; font-family: "Microsoft YaHei", sans-serif; background: #edf3f8; color: #526e85; }
+    .toolbar { position: sticky; top: 0; z-index: 10; display: flex; gap: 12px; align-items: center; padding: 12px 20px; background: #fff; box-shadow: 0 2px 12px #8aa7bd22; }
+    .toolbar strong { margin-right: auto; }
+    button { padding: 8px 15px; border: 1px solid #aec8de; border-radius: 9px; background: #f7fbff; color: #426581; cursor: pointer; }
+    .stage { max-width: 950px; margin: 36px auto; padding: 22px; border-radius: 20px; background: #fff; }
+    .stage h2 { margin: 0 0 16px; font-size: 16px; }
+    .stage.narrow { max-width: 520px; }
+    .sample { width: 100%; }
+    .avatar { display: inline-grid; place-items: center; width: 28px; height: 28px; margin-right: 8px; border-radius: 50%; background: #d7eaff; color: #6599c1; font-weight: bold; }
+    #header-content { display: inline-block; }
+    #header-content-inner-column { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    body.dark { background: #19263d; }
+    body.dark .stage { background-color: #202f4a; }
+    body.dark .stage h2 { color: #c7dceb; }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <strong>欢迎上舰 · 13 层素材动画预览</strong>
+    <button id="replay" type="button">重播动画</button>
+    <button id="theme" type="button">切换底色</button>
+  </div>
+
+  <section class="stage">
+    <h2>宽预览</h2>
+    <div class="sample">
+      <yt-live-chat-membership-item-renderer show-only-header blc-guard-level="3">
+        <div id="card">
+          <div id="header">
+            <span class="avatar" aria-hidden="true">✚</span>
+            <div id="header-content"><div id="header-content-primary-column"><div id="header-content-inner-column">
+              <span id="author-name">奶酪cheese</span><span id="header-subtext">开通舰长，欢迎上舰！</span>
+            </div></div></div>
+          </div>
+        </div>
+      </yt-live-chat-membership-item-renderer>
+    </div>
+  </section>
+
+  <section class="stage narrow">
+    <h2>窄弹幕栏预览</h2>
+    <div class="sample">
+      <yt-live-chat-membership-item-renderer show-only-header blc-guard-level="1">
+        <div id="card">
+          <div id="header">
+            <span class="avatar" aria-hidden="true">✚</span>
+            <div id="header-content"><div id="header-content-primary-column"><div id="header-content-inner-column">
+              <span id="author-name">一位昵称较长的总督用户</span><span id="header-subtext">续费总督，欢迎上舰！</span>
+            </div></div></div>
+          </div>
+        </div>
+      </yt-live-chat-membership-item-renderer>
+    </div>
+  </section>
+
+  <script>
+    const layers = {
+      backplates: 'backplates.png', title: 'welcome_title.png',
+      'iv-bag': 'iv_bag.png', 'iv-tube': 'iv_tube.png',
+      stethoscope: 'stethoscope.png', gauze: 'gauze.png', bandage: 'bandage.png',
+      ecg: 'ecg_line.png', 'cross-left': 'medical_cross_left.png',
+      'cross-right': 'medical_cross_right.png',
+      'accents-left': 'accents_left.png', 'accents-right': 'accents_right.png',
+      'accents-other': 'accents_other.png'
+    };
+    function applyLocalImages() {
+      document.querySelectorAll('yt-live-chat-membership-item-renderer').forEach(item => {
+        for (const [key, file] of Object.entries(layers)) {
+          item.style.setProperty(`--welcome-${key}`, `url("assets/welcome_layers_13/${file}")`);
+        }
+      });
+    }
+    applyLocalImages();
+    document.querySelector('#replay').addEventListener('click', () => {
+      document.querySelectorAll('yt-live-chat-membership-item-renderer').forEach(item => {
+        const copy = item.cloneNode(true);
+        item.replaceWith(copy);
+      });
+    });
+    document.querySelector('#theme').addEventListener('click', () => document.body.classList.toggle('dark'));
+  </script>
+</body>
+</html>
