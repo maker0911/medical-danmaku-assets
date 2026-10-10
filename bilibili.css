@@ -477,19 +477,19 @@ yt-live-chat-text-message-renderer .emoji.blc-large-emoji {
 
 /* 欢迎上舰：只匹配大航海购买通知，不影响文字弹幕、礼物或 SC。 */
 yt-live-chat-membership-item-renderer {
-  --welcome-backplates: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/welcome_layers_13/backplates.png");
-  --welcome-title: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/welcome_layers_13/welcome_title.png");
-  --welcome-iv-bag: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/welcome_layers_13/iv_bag.png");
-  --welcome-iv-tube: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/welcome_layers_13/iv_tube.png");
-  --welcome-stethoscope: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/welcome_layers_13/stethoscope.png");
-  --welcome-gauze: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/welcome_layers_13/gauze.png");
-  --welcome-bandage: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/welcome_layers_13/bandage.png");
-  --welcome-ecg: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/welcome_layers_13/ecg_line.png");
-  --welcome-cross-left: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/welcome_layers_13/medical_cross_left.png");
-  --welcome-cross-right: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/welcome_layers_13/medical_cross_right.png");
-  --welcome-accents-left: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/welcome_layers_13/accents_left.png");
-  --welcome-accents-right: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/welcome_layers_13/accents_right.png");
-  --welcome-accents-other: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/welcome_layers_13/accents_other.png");
+  --welcome-backplates: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/backplates.png");
+  --welcome-title: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/welcome_title.png");
+  --welcome-iv-bag: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/iv_bag.png");
+  --welcome-iv-tube: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/iv_tube.png");
+  --welcome-stethoscope: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/stethoscope.png");
+  --welcome-gauze: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/gauze.png");
+  --welcome-bandage: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/bandage.png");
+  --welcome-ecg: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/ecg_line.png");
+  --welcome-cross-left: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/medical_cross_left.png");
+  --welcome-cross-right: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/medical_cross_right.png");
+  --welcome-accents-left: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/accents_left.png");
+  --welcome-accents-right: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/accents_right.png");
+  --welcome-accents-other: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/accents_other.png");
   display: block !important;
   width: 100% !important;
   margin: 16px 0 22px !important;

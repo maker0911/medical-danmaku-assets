@@ -1,3 +1,10 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>彗星号 · 欢迎上舰</title>
+  <style>
 /* 欢迎上舰：只匹配大航海购买通知，不影响文字弹幕、礼物或 SC。 */
 yt-live-chat-membership-item-renderer {
   --welcome-backplates: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/backplates.png");
@@ -163,3 +170,110 @@ yt-live-chat-membership-item-renderer #timestamp {
     animation: none !important;
   }
 }
+
+  </style>
+  <style>
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent; }
+    body { display: grid; place-items: center; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; }
+    #welcome-stage { width: min(960px, 100%); }
+    .welcome-leave { animation: welcome-leave 360ms ease-in both !important; }
+    @keyframes welcome-leave { to { opacity: 0; transform: translateY(-12px); } }
+  </style>
+</head>
+<body>
+  <main id="welcome-stage" aria-live="polite"></main>
+  <script>
+    (() => {
+      const EVENT = 'LIVE_OPEN_PLATFORM_GUARD';
+      const labels = { 1: '总督', 2: '提督', 3: '舰长' };
+      const stage = document.getElementById('welcome-stage');
+      const queue = [];
+      let showing = false;
+
+      function makeNotification(data) {
+        const level = Number(data.guardLevel);
+        if (!labels[level] || (data.platform && data.platform !== 'bili')) return null;
+
+        const item = document.createElement('yt-live-chat-membership-item-renderer');
+        item.setAttribute('show-only-header', '');
+        item.setAttribute('blc-guard-level', String(level));
+
+        const card = document.createElement('div');
+        card.id = 'card';
+        const header = document.createElement('div');
+        header.id = 'header';
+        const content = document.createElement('div');
+        content.id = 'header-content';
+        const primary = document.createElement('div');
+        primary.id = 'header-content-primary-column';
+        const inner = document.createElement('div');
+        inner.id = 'header-content-inner-column';
+        const name = document.createElement('span');
+        name.id = 'author-name';
+        name.textContent = String(data.uname || '舰队成员').slice(0, 64);
+        const subtext = document.createElement('span');
+        subtext.id = 'header-subtext';
+        const action = String(data.action || '开通').slice(0, 16);
+        subtext.textContent = `${action}${labels[level]}，欢迎上舰！`;
+
+        inner.append(name, subtext);
+        primary.append(inner);
+        content.append(primary);
+        header.append(content);
+        card.append(header);
+        item.append(card);
+        return item;
+      }
+
+      function showNext() {
+        if (showing || queue.length === 0) return;
+        showing = true;
+        const item = queue.shift();
+        stage.replaceChildren(item);
+        window.setTimeout(() => {
+          item.classList.add('welcome-leave');
+          window.setTimeout(() => {
+            item.remove();
+            showing = false;
+            showNext();
+          }, 380);
+        }, 7000);
+      }
+
+      window.addEventListener('message', event => {
+        if (event.source !== window.parent) return;
+        const data = event.data;
+        if (!data || data.category !== 'event' || data.type !== EVENT) return;
+        const message = Array.isArray(data.args) ? data.args[0] : null;
+        if (!message || typeof message !== 'object') return;
+        const item = makeNotification(message);
+        if (!item) return;
+        queue.push(item);
+        showNext();
+      });
+
+      window.parent.postMessage({ fun: 'subscribe', args: [EVENT] }, '*');
+
+      if (new URLSearchParams(location.search).has('demo')) {
+        const demo = makeNotification({ uname: '奶酪cheese', guardLevel: 3, action: '开通', platform: 'bili' });
+        if (location.protocol === 'file:') {
+          const files = {
+            backplates: 'backplates.png', title: 'welcome_title.png',
+            'iv-bag': 'iv_bag.png', 'iv-tube': 'iv_tube.png',
+            stethoscope: 'stethoscope.png', gauze: 'gauze.png', bandage: 'bandage.png',
+            ecg: 'ecg_line.png', 'cross-left': 'medical_cross_left.png',
+            'cross-right': 'medical_cross_right.png',
+            'accents-left': 'accents_left.png', 'accents-right': 'accents_right.png',
+            'accents-other': 'accents_other.png'
+          };
+          for (const [key, file] of Object.entries(files)) {
+            demo.style.setProperty(`--welcome-${key}`, `url("assets/welcome_layers_13/${file}")`);
+          }
+        }
+        queue.push(demo);
+        showNext();
+      }
+    })();
+  </script>
+</body>
+</html>
