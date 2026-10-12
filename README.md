@@ -2,11 +2,11 @@
 
 ## 上舰装饰
 
-`bilibili.css` 现包含独立的“欢迎上舰”装饰，只匹配 `yt-live-chat-membership-item-renderer` 上舰通知，不改文字弹幕、礼物或 SC。原有的 13 张素材和新增的三张等级标题图都放在 `assets/welcome_layers_13/`；它们都是 2048×682 的同坐标透明画布，按原位叠合并等比缩放。舰长使用“感谢舰长”，提督使用“感谢提督”，总督使用“感谢总督”；只有标题图按等级替换，其余图层与动画相同。没有等级属性的旧通知继续显示原“欢迎上舰”标题。背景和小装饰先出现，标题随后轻弹入场，左侧输液袋、右侧听诊器从两边渐显，右下创可贴最后落位。左右两个小加号依次轻弹出现，之后各自缓慢上下悬浮并轻微摇摆。用户名和原有上舰说明保留在图案下方。
+`bilibili.css` 现包含独立的“欢迎上舰”装饰，只匹配 `yt-live-chat-membership-item-renderer` 上舰通知，不改文字弹幕、礼物或 SC。原有的 13 张素材和新增的三张等级标题图都放在 `assets/welcome_layers_13/`；它们都是 2048×682 的同坐标透明画布，按原位叠合并等比缩放。舰长使用“感谢舰长”，提督使用“感谢提督”，总督使用“感谢总督”；只有标题图按等级替换，其余图层与动画相同。没有等级属性的旧通知继续显示原“欢迎上舰”标题。背景和小装饰先出现，标题随后轻弹入场，左侧输液袋、右侧听诊器从两边渐显，右下创可贴最后落位。左右两个小加号依次轻弹出现，之后各自缓慢上下悬浮并轻微摇摆。三个平台都隐藏图下原有的整句上舰说明，只在图下显示奶白水蓝的独立昵称牌。
 
 打开 `welcome-ship-preview.html` 可看舰长、提督、总督效果并重播动画。`welcome-ship.css` 是这部分的独立 CSS，已同步附加到完整的 `bilibili.css`；粘贴完整 CSS 时不用再次粘贴独立文件。图片使用公开仓库固定版本的绝对 URL，预览页则改用本地图片路径。BLiveChat 上舰通知的 `blc-guard-level` 属性区分 3＝舰长、2＝提督、1＝总督；小fa朵若复用同结构便会匹配，需在平台预览确认。
 
-彗星号开发文档把大航海开通或续费定义为 `LIVE_OPEN_PLATFORM_GUARD` 事件。`huixinghao-welcome.html` 是对应的单文件上舰插件页面：它只订阅该事件，用原始 `guardLevel`、`uname`、`action` 生成同款通知，不依赖彗星号内置弹幕 HTML。将此 HTML 作为彗星号的上舰通知插件页面使用；若原弹幕插件也显示上舰，需停用原显示以避免重复。打开本地 `huixinghao-welcome.html?demo=1&level=3`、`level=2` 或 `level=1` 可分别预览舰长、提督、总督；真实消息只由彗星号父页面发送。`huixinghao-welcome-preview.png` 是早期本地渲染截图。
+彗星号开发文档把大航海开通或续费定义为 `LIVE_OPEN_PLATFORM_GUARD` 事件。`huixinghao-welcome.html` 是对应的单文件上舰插件页面：它只订阅该事件，用原始 `guardLevel`、`uname` 生成同款通知，不依赖彗星号内置弹幕 HTML。页面上的昵称牌与 BLiveChat、小fa朵使用同一份样式；开通／续费动作和等级写入无障碍标签，不在图下重复显示。将此 HTML 作为彗星号的上舰通知插件页面使用；若原弹幕插件也显示上舰，需停用原显示以避免重复。打开本地 `huixinghao-welcome.html?demo=1&level=3`、`level=2` 或 `level=1` 可分别预览舰长、提督、总督；真实消息只由彗星号父页面发送。`huixinghao-welcome-preview.png` 是早期本地渲染截图。
 
 三处共用完整样式 `bilibili.css`。其中原有的文字卡片规则只应用于用户发送的文字弹幕。彗星号的旧版 BLiveChat 结构在 `#content` 外有 `#card`，等级属性是 `privilegetype`；新版本使用 `blc-guard-level`。文字卡片 CSS 同时兼容两种属性，无需额外脚本。
 
