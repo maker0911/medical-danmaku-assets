@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>彗星号 · 医疗弹幕、上舰与礼物感谢</title>
+  <title>彗星号 · 医疗弹幕、上舰、礼物与醒目留言</title>
   <style>
 /* BLiveChat 文字弹幕：普通用户隐藏输液袋和软管，其余样式共用。 */
 
@@ -918,6 +918,49 @@ medical-gift-renderer .medical-gift-icon {
 
 medical-gift-renderer .medical-gift-count { flex: none; }
 
+/* 醒目留言复用礼物卡，只让正文底板随文字增加高度。 */
+medical-gift-renderer.medical-super-chat .medical-gift-plate {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: auto;
+  min-height: 146px;
+  padding: 28px 50px 31px;
+}
+
+medical-gift-renderer.medical-super-chat .medical-gift-plate::before {
+  background: none;
+  border: 50px solid transparent;
+  border-image-source: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/185f14805f7aaed57e699cab3336a190707ab6aa/assets/gift/amount_frame.png");
+  border-image-slice: 135 450 135 450 fill;
+  border-image-width: 50px 167px 50px 167px;
+  border-image-repeat: stretch;
+}
+
+medical-gift-renderer .medical-sc-heading,
+medical-gift-renderer .medical-sc-message {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-width: 0;
+  color: #527b9f;
+  font-weight: 900;
+  text-shadow: 0 1px 0 #fff, 0 2px 2px #9cb9d2;
+}
+
+medical-gift-renderer .medical-sc-heading {
+  font-size: clamp(17px, 2.4vw, 25px);
+  line-height: 1.25;
+}
+
+medical-gift-renderer .medical-sc-message {
+  font-size: clamp(17px, 2.5vw, 27px);
+  line-height: 1.38;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 @keyframes medical-gift-enter {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -951,6 +994,7 @@ medical-gift-renderer .medical-gift-count { flex: none; }
   medical-gift-renderer .medical-gift-avatar { width: 104px; height: 104px; }
   medical-gift-renderer .medical-gift-plate { padding: 10px 31px 17px; }
   medical-gift-renderer .medical-gift-gift-name { max-width: 7em; }
+  medical-gift-renderer.medical-super-chat .medical-gift-plate { padding: 23px 34px 26px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -960,7 +1004,6 @@ medical-gift-renderer .medical-gift-count { flex: none; }
   medical-gift-renderer .medical-gift-name,
   medical-gift-renderer .medical-gift-plate { animation: none; }
 }
-
   </style>
   <style>
     html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent; }
@@ -979,6 +1022,7 @@ medical-gift-renderer .medical-gift-count { flex: none; }
       const DM = 'LIVE_OPEN_PLATFORM_DM';
       const GUARD = 'LIVE_OPEN_PLATFORM_GUARD';
       const GIFT = 'LIVE_OPEN_PLATFORM_SEND_GIFT';
+      const SUPER_CHAT = 'LIVE_OPEN_PLATFORM_SUPER_CHAT';
       const CLEAR = 'CLEAR_DATA';
       const guardLabels = { 1: '总督', 2: '提督', 3: '舰长' };
       const items = document.getElementById('items');
@@ -1072,8 +1116,7 @@ medical-gift-renderer .medical-gift-count { flex: none; }
         return item;
       }
 
-      function createGiftNotification(data) {
-        if (!data || typeof data !== 'object' || (data.platform && data.platform !== 'bili')) return null;
+      function createThankYouCard(data) {
         const item = document.createElement('medical-gift-renderer');
         const top = document.createElement('div');
         top.className = 'medical-gift-top';
@@ -1096,9 +1139,15 @@ medical-gift-renderer .medical-gift-count { flex: none; }
         const nickname = document.createElement('div');
         nickname.className = 'medical-gift-name';
         nickname.textContent = text(data.uname, '观众').slice(0, 100);
-
         const plate = document.createElement('div');
         plate.className = 'medical-gift-plate';
+        item.append(top, nickname, plate);
+        return { item, plate };
+      }
+
+      function createGiftNotification(data) {
+        if (!data || typeof data !== 'object' || (data.platform && data.platform !== 'bili')) return null;
+        const { item, plate } = createThankYouCard(data);
         const line = document.createElement('div');
         line.className = 'medical-gift-line';
         const prefix = document.createElement('span');
@@ -1122,7 +1171,22 @@ medical-gift-renderer .medical-gift-count { flex: none; }
         count.textContent = `×${quantity}`;
         line.append(count);
         plate.append(line);
-        item.append(top, nickname, plate);
+        return item;
+      }
+
+      function createSuperChatNotification(data) {
+        if (!data || typeof data !== 'object' || (data.platform && data.platform !== 'bili')) return null;
+        const messageText = text(data.message).slice(0, 2000);
+        if (!messageText.trim()) return null;
+        const { item, plate } = createThankYouCard(data);
+        item.classList.add('medical-super-chat');
+        const heading = document.createElement('div');
+        heading.className = 'medical-sc-heading';
+        heading.textContent = '赠送的醒目留言';
+        const message = document.createElement('div');
+        message.className = 'medical-sc-message';
+        message.textContent = messageText;
+        plate.append(heading, message);
         return item;
       }
 
@@ -1144,16 +1208,17 @@ medical-gift-renderer .medical-gift-count { flex: none; }
         if (!envelope || envelope.category !== 'event') return;
         if (envelope.type === CLEAR) { items.replaceChildren(); showingDemo = false; return; }
         const data = Array.isArray(envelope.args) ? envelope.args[0] : null;
-        if ((envelope.type === DM || envelope.type === GUARD || envelope.type === GIFT) && showingDemo) {
+        if ((envelope.type === DM || envelope.type === GUARD || envelope.type === GIFT || envelope.type === SUPER_CHAT) && showingDemo) {
           items.replaceChildren();
           showingDemo = false;
         }
         if (envelope.type === DM) appendItem(createTextMessage(data));
         if (envelope.type === GUARD) appendItem(createGuardNotification(data), 8000);
         if (envelope.type === GIFT) appendItem(createGiftNotification(data), 8000);
+        if (envelope.type === SUPER_CHAT) appendItem(createSuperChatNotification(data), 8000);
       });
 
-      window.parent.postMessage({ fun: 'subscribe', args: [DM, GUARD, GIFT, CLEAR] }, '*');
+      window.parent.postMessage({ fun: 'subscribe', args: [DM, GUARD, GIFT, SUPER_CHAT, CLEAR] }, '*');
 
       // 本地 ?demo=1 与彗星号配置画布 env=1 显示模拟消息，收到真实消息即清除。
       if (params.has('demo') || params.get('env') === '1') {
@@ -1167,6 +1232,7 @@ medical-gift-renderer .medical-gift-count { flex: none; }
         samples.forEach(sample => appendItem(createTextMessage(sample)));
         [3, 2, 1].forEach(level => appendItem(createGuardNotification({ uname: '奶酪cheese', guardLevel: level, platform: 'bili', action: '开通' })));
         appendItem(createGiftNotification({ uname: '送礼物的小伙伴', giftName: '小花花', giftNum: 1, platform: 'bili' }));
+        appendItem(createSuperChatNotification({ uname: '醒目留言的小伙伴', message: '今天也要好好休息呀！这是一条会自动换行的醒目留言，文字增多时奶白底板也会跟着变高。', platform: 'bili' }));
       }
     })();
   </script>

@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const source = fs.readFileSync('huixinghao-all.html', 'utf8');
 const head = source.slice(0, source.indexOf('  <script>'))
-  .replace('彗星号 · 医疗弹幕、上舰与礼物感谢', 'BLiveChat · 医疗弹幕、上舰与礼物感谢');
+  .replace('彗星号 · 医疗弹幕、上舰、礼物与醒目留言', 'BLiveChat · 医疗弹幕、上舰、礼物与醒目留言');
 const commonStart = source.indexOf('      function text(value');
 const commonEnd = source.indexOf("      window.addEventListener('message'", commonStart);
 if (commonStart < 0 || commonEnd < 0) throw new Error('Cannot locate shared renderers');
@@ -60,12 +60,17 @@ ${renderers}
             platform: 'bili', uname: msg.authorName,
             guardLevel: msg.privilegeType, action: '开通'
           });
+        } else if (msg.type === 3) {
+          item = createSuperChatNotification({
+            platform: 'bili', uname: msg.authorName, face: msg.avatarUrl,
+            message: msg.content
+          });
         }
         if (item && msg.id != null) item.dataset.messageId = String(msg.id);
         if (item && msg.id != null) messages.set(String(msg.id), { ...msg });
         if (messages.size > 128) messages.delete(messages.keys().next().value);
         if (item && showingDemo) { items.replaceChildren(); showingDemo = false; }
-        appendItem(item, msg.type === 1 || msg.type === 2 ? 8000 : 0);
+        appendItem(item, msg.type === 1 || msg.type === 2 || msg.type === 3 ? 8000 : 0);
       }
 
       window.addEventListener('message', event => {
@@ -83,6 +88,10 @@ ${renderers}
               const giftName = item.querySelector('.medical-gift-gift-name');
               if (count) count.textContent = '×' + Math.max(1, Math.floor(Number(previous.num) || 1));
               if (giftName) giftName.textContent = text(previous.giftName, '礼物').slice(0, 80);
+            }
+            if (item && previous.type === 3) {
+              const message = item.querySelector('.medical-sc-message');
+              if (message) message.textContent = text(previous.content).slice(0, 2000);
             }
           }
         }
@@ -104,6 +113,7 @@ ${renderers}
         addMessage({ type: 0, authorName: '提督', content: '提督消息示例', privilegeType: 2 });
         addMessage({ type: 2, authorName: '奶酪cheese', privilegeType: 3 });
         addMessage({ type: 1, authorName: '送礼物的小伙伴', giftName: '小花花', num: 1 });
+        addMessage({ type: 3, authorName: '醒目留言的小伙伴', content: '今天也要好好休息呀！这是一条会自动换行的醒目留言，文字增多时奶白底板也会跟着变高。' });
       }
     })();
   </script>

@@ -177,6 +177,49 @@ medical-gift-renderer .medical-gift-icon {
 
 medical-gift-renderer .medical-gift-count { flex: none; }
 
+/* 醒目留言复用礼物卡，只让正文底板随文字增加高度。 */
+medical-gift-renderer.medical-super-chat .medical-gift-plate {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: auto;
+  min-height: 146px;
+  padding: 28px 50px 31px;
+}
+
+medical-gift-renderer.medical-super-chat .medical-gift-plate::before {
+  background: none;
+  border: 50px solid transparent;
+  border-image-source: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/185f14805f7aaed57e699cab3336a190707ab6aa/assets/gift/amount_frame.png");
+  border-image-slice: 135 450 135 450 fill;
+  border-image-width: 50px 167px 50px 167px;
+  border-image-repeat: stretch;
+}
+
+medical-gift-renderer .medical-sc-heading,
+medical-gift-renderer .medical-sc-message {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-width: 0;
+  color: #527b9f;
+  font-weight: 900;
+  text-shadow: 0 1px 0 #fff, 0 2px 2px #9cb9d2;
+}
+
+medical-gift-renderer .medical-sc-heading {
+  font-size: clamp(17px, 2.4vw, 25px);
+  line-height: 1.25;
+}
+
+medical-gift-renderer .medical-sc-message {
+  font-size: clamp(17px, 2.5vw, 27px);
+  line-height: 1.38;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 @keyframes medical-gift-enter {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -210,6 +253,7 @@ medical-gift-renderer .medical-gift-count { flex: none; }
   medical-gift-renderer .medical-gift-avatar { width: 104px; height: 104px; }
   medical-gift-renderer .medical-gift-plate { padding: 10px 31px 17px; }
   medical-gift-renderer .medical-gift-gift-name { max-width: 7em; }
+  medical-gift-renderer.medical-super-chat .medical-gift-plate { padding: 23px 34px 26px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

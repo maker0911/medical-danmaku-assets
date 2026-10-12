@@ -6,13 +6,13 @@
 
 打开 `welcome-ship-preview.html` 可看舰长、提督、总督效果并重播动画。`welcome-ship.css` 是这部分的独立 CSS，已同步附加到完整的 `bilibili.css`；粘贴完整 CSS 时不用再次粘贴独立文件。图片使用公开仓库固定版本的绝对 URL，预览页则改用本地图片路径。BLiveChat 上舰通知的 `blc-guard-level` 属性区分 3＝舰长、2＝提督、1＝总督；小fa朵若复用同结构便会匹配，需在平台预览确认。
 
-彗星号开发文档把用户文字弹幕定义为 `LIVE_OPEN_PLATFORM_DM`，大航海开通或续费定义为 `LIVE_OPEN_PLATFORM_GUARD`，礼物定义为 `LIVE_OPEN_PLATFORM_SEND_GIFT`。上传 `huixinghao-all.html` 即可在同一插件页面显示现有的普通、舰长、提督、总督、房管文字弹幕、三档上舰通知与礼物感谢；文件已内嵌完整 CSS，不需额外粘贴样式。它还订阅 `CLEAR_DATA` 来清空画面。未设计的事件类型不会显示。若原弹幕插件也显示这些消息，应关闭原显示以避免重复。打开本地 `huixinghao-all.html?demo=1` 可看八条模拟消息；彗星号配置画布的 `env=1` 也会显示模拟消息，收到真实消息时自动清除模拟内容。旧文件 `huixinghao-welcome.html` 仍是仅显示上舰通知的版本。
+彗星号开发文档把用户文字弹幕定义为 `LIVE_OPEN_PLATFORM_DM`，大航海开通或续费定义为 `LIVE_OPEN_PLATFORM_GUARD`，礼物定义为 `LIVE_OPEN_PLATFORM_SEND_GIFT`，醒目留言定义为 `LIVE_OPEN_PLATFORM_SUPER_CHAT`。上传 `huixinghao-all.html` 即可在同一插件页面显示现有的普通、舰长、提督、总督、房管文字弹幕、三档上舰通知、礼物感谢与醒目留言；文件已内嵌完整 CSS，不需额外粘贴样式。它还订阅 `CLEAR_DATA` 来清空画面。未设计的事件类型不会显示。若原弹幕插件也显示这些消息，应关闭原显示以避免重复。打开本地 `huixinghao-all.html?demo=1` 可看九条模拟消息；彗星号配置画布的 `env=1` 也会显示模拟消息，收到真实消息时自动清除模拟内容。旧文件 `huixinghao-welcome.html` 仍是仅显示上舰通知的版本。
 
 ## 礼物感谢
 
-`gift-thanks.css` 定义圆形头像框、取自欢迎上舰素材的左右医疗十字、同款奶白水蓝昵称牌，以及三段拼接的礼物框。礼物框裁好的左右端与中段位于 `assets/gift/`，中段随卡片宽度伸缩；CSS 引用公开仓库固定版本的图片 URL。礼物图位于“赠送的”与数量之间，礼物名过长时省略，数量来自消息数据。打开 `gift-thanks-preview.html` 可看宽、窄两种画布。
+`gift-thanks.css` 定义圆形头像框、取自欢迎上舰素材的左右医疗十字、同款奶白水蓝昵称牌，以及三段拼接的礼物框。礼物框裁好的左右端与中段位于 `assets/gift/`，中段随卡片宽度伸缩。醒目留言复用上方区域，在奶白底板上显示“赠送的醒目留言”，正文另起一行并自动换行；底板用原图九宫格边框随行数增高，四角比例固定。礼物图位于“赠送的”与数量之间，礼物名过长时省略，数量来自消息数据。打开 `gift-thanks-preview.html` 可看宽、窄画布和多行醒目留言。
 
-彗星号使用 `LIVE_OPEN_PLATFORM_SEND_GIFT` 的 `uname`、`face`、`giftName`、`giftIcon`、`giftNum`，只处理 B 站礼物。BLiveChat 若要完整显示礼物图，请使用 `blivechat-all.html` 自定义 HTML 模板；它通过模板消息接口读取 `avatarUrl`、`authorName`、`giftIconUrl`、`giftName`、`num`，并继续显示文字弹幕和三档上舰通知。该模板不显示 SC 等尚未设计的事件。`build-blivechat-template.js` 可从彗星号模板重新生成 BLiveChat 单文件模板。BLiveChat 在线版需要把模板 HTML 放在可访问的静态网页上，再在自定义模板设置中填网页 URL；只粘贴 CSS 无法取得它默认礼物节点中没有输出的礼物图片字段。小fa朵只能粘贴 CSS，待确认其礼物通知现成节点后再适配；不要直接把这份 HTML 粘贴进小fa朵 CSS 框。
+彗星号礼物使用 `LIVE_OPEN_PLATFORM_SEND_GIFT` 的 `uname`、`face`、`giftName`、`giftIcon`、`giftNum`；醒目留言使用 `LIVE_OPEN_PLATFORM_SUPER_CHAT` 的 `uname`、`face`、`message`。BLiveChat 自定义模板 `blivechat-all.html` 读取礼物的 `avatarUrl`、`authorName`、`giftIconUrl`、`giftName`、`num`，也读取醒目留言的 `avatarUrl`、`authorName`、`content`，并继续显示文字弹幕和三档上舰通知。运行 `node sync-huixinghao-css.js` 同步彗星号内嵌 CSS，再运行 `node build-blivechat-template.js` 从彗星号模板重新生成 BLiveChat 单文件模板。BLiveChat 在线版的自定义模板地址是 `https://maker0911.github.io/medical-danmaku-assets/blivechat-all.html`。小fa朵只能粘贴 CSS，待确认其礼物和醒目留言通知现成节点后再适配；不要直接把这份 HTML 粘贴进小fa朵 CSS 框。
 
 三个平台的上舰、上提、上总动画现在都隐藏平台自带的头像和勋章，图案下方仅显示独立昵称牌；彗星号完整模板本身也不创建头像或勋章节点。
 
