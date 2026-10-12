@@ -2,6 +2,7 @@
 yt-live-chat-membership-item-renderer {
   --welcome-backplates: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/backplates.png");
   --welcome-title: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/welcome_title.png");
+  --welcome-title-captain: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/1398d3e863737e63bbbb0c0ce865be7267fb399e/assets/welcome_layers_13/captain_title.png");
   --welcome-title-admiral: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/5d1f58844d76184a60a8467913871b2af49266b0/assets/welcome_layers_13/admiral_title.png");
   --welcome-title-governor: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/5d1f58844d76184a60a8467913871b2af49266b0/assets/welcome_layers_13/governor_title.png");
   --welcome-iv-bag: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/iv_bag.png");
@@ -22,7 +23,11 @@ yt-live-chat-membership-item-renderer {
   font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif !important;
 }
 
-/* BLiveChat 的购买等级：2＝提督，1＝总督；未标注等级时沿用舰长标题。 */
+/* BLiveChat 的购买等级：3＝舰长，2＝提督，1＝总督；未标注时沿用原“欢迎上舰”。 */
+yt-live-chat-membership-item-renderer[blc-guard-level="3"] {
+  --welcome-title: var(--welcome-title-captain);
+}
+
 yt-live-chat-membership-item-renderer[blc-guard-level="2"] {
   --welcome-title: var(--welcome-title-admiral);
 }
