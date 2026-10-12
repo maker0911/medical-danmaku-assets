@@ -31,7 +31,7 @@
   </div>
 
   <section class="stage">
-    <h2>宽预览</h2>
+    <h2>舰长 · 宽预览</h2>
     <div class="sample">
       <yt-live-chat-membership-item-renderer show-only-header blc-guard-level="3">
         <div id="card">
@@ -47,7 +47,23 @@
   </section>
 
   <section class="stage narrow">
-    <h2>窄弹幕栏预览</h2>
+    <h2>提督 · 窄弹幕栏预览</h2>
+    <div class="sample">
+      <yt-live-chat-membership-item-renderer show-only-header blc-guard-level="2">
+        <div id="card">
+          <div id="header">
+            <span class="avatar" aria-hidden="true">✚</span>
+            <div id="header-content"><div id="header-content-primary-column"><div id="header-content-inner-column">
+              <span id="author-name">新晋提督</span><span id="header-subtext">开通提督，欢迎上舰！</span>
+            </div></div></div>
+          </div>
+        </div>
+      </yt-live-chat-membership-item-renderer>
+    </div>
+  </section>
+
+  <section class="stage narrow">
+    <h2>总督 · 窄弹幕栏预览</h2>
     <div class="sample">
       <yt-live-chat-membership-item-renderer show-only-header blc-guard-level="1">
         <div id="card">
@@ -65,6 +81,7 @@
   <script>
     const layers = {
       backplates: 'backplates.png', title: 'welcome_title.png',
+      'title-admiral': 'admiral_title.png', 'title-governor': 'governor_title.png',
       'iv-bag': 'iv_bag.png', 'iv-tube': 'iv_tube.png',
       stethoscope: 'stethoscope.png', gauze: 'gauze.png', bandage: 'bandage.png',
       ecg: 'ecg_line.png', 'cross-left': 'medical_cross_left.png',

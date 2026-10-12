@@ -9,6 +9,8 @@
 yt-live-chat-membership-item-renderer {
   --welcome-backplates: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/backplates.png");
   --welcome-title: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/welcome_title.png");
+  --welcome-title-admiral: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/5d1f58844d76184a60a8467913871b2af49266b0/assets/welcome_layers_13/admiral_title.png");
+  --welcome-title-governor: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/5d1f58844d76184a60a8467913871b2af49266b0/assets/welcome_layers_13/governor_title.png");
   --welcome-iv-bag: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/iv_bag.png");
   --welcome-iv-tube: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/iv_tube.png");
   --welcome-stethoscope: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/stethoscope.png");
@@ -25,6 +27,15 @@ yt-live-chat-membership-item-renderer {
   margin: 16px 0 22px !important;
   overflow: visible !important;
   font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif !important;
+}
+
+/* BLiveChat 的购买等级：2＝提督，1＝总督；未标注等级时沿用舰长标题。 */
+yt-live-chat-membership-item-renderer[blc-guard-level="2"] {
+  --welcome-title: var(--welcome-title-admiral);
+}
+
+yt-live-chat-membership-item-renderer[blc-guard-level="1"] {
+  --welcome-title: var(--welcome-title-governor);
 }
 
 /* 所有素材保留原始画布坐标；卡片宽度变化时，13 层按同一比例缩放。 */
@@ -295,10 +306,13 @@ yt-live-chat-membership-item-renderer #timestamp {
       window.parent.postMessage({ fun: 'subscribe', args: [EVENT] }, '*');
 
       if (new URLSearchParams(location.search).has('demo')) {
-        const demo = makeNotification({ uname: '奶酪cheese', guardLevel: 3, action: '开通', platform: 'bili' });
+        const requestedLevel = Number(new URLSearchParams(location.search).get('level'));
+        const demoLevel = labels[requestedLevel] ? requestedLevel : 3;
+        const demo = makeNotification({ uname: '奶酪cheese', guardLevel: demoLevel, action: '开通', platform: 'bili' });
         if (location.protocol === 'file:') {
           const files = {
             backplates: 'backplates.png', title: 'welcome_title.png',
+            'title-admiral': 'admiral_title.png', 'title-governor': 'governor_title.png',
             'iv-bag': 'iv_bag.png', 'iv-tube': 'iv_tube.png',
             stethoscope: 'stethoscope.png', gauze: 'gauze.png', bandage: 'bandage.png',
             ecg: 'ecg_line.png', 'cross-left': 'medical_cross_left.png',
