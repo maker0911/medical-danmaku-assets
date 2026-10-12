@@ -1,0 +1,1231 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BLiveChat · 医疗弹幕、上舰与礼物感谢</title>
+  <style>
+/* BLiveChat 文字弹幕：普通用户隐藏输液袋和软管，其余样式共用。 */
+
+body,
+yt-live-chat-renderer,
+yt-live-chat-item-list-renderer,
+#items {
+  background: transparent !important;
+}
+
+#items { container-type: inline-size; }
+yt-live-chat-renderer ::-webkit-scrollbar { display: none !important; }
+
+yt-live-chat-text-message-renderer,
+yt-live-chat-text-message-renderer * {
+  box-sizing: border-box !important;
+}
+
+yt-live-chat-text-message-renderer {
+  position: relative !important;
+  display: block !important;
+  width: auto !important;
+  margin: 52px 28px 88px 42px !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif !important;
+  animation: medical-danmaku-enter 900ms ease-out both !important;
+}
+
+/* 装饰挂在每条文字弹幕自身，不依赖 BLiveChat 的可选内部包装层。 */
+yt-live-chat-text-message-renderer::before,
+yt-live-chat-text-message-renderer::after {
+  content: "";
+  position: absolute;
+  display: block;
+  z-index: 4;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-size: 901px 300px;
+}
+
+yt-live-chat-text-message-renderer::before {
+  left: -23px;
+  top: -43px;
+  width: 80px;
+  height: 126px;
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/iv_bag.png");
+  background-position: -50px -39px;
+  transform-origin: 44px 9px;
+  animation: medical-bag-sway 3s ease-in-out infinite !important;
+}
+
+yt-live-chat-text-message-renderer::after {
+  left: -13px;
+  top: 77px;
+  width: 148px;
+  height: 83px;
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/iv_tube.png");
+  background-position: -60px -158px;
+  transform-origin: 50% 100%;
+  animation: medical-tube-flex 3s ease-in-out -2.8s infinite !important;
+}
+
+/* 普通用户隐藏输液袋和软管；两套 BLiveChat DOM 的等级属性都可识别。 */
+yt-live-chat-text-message-renderer:is([author-type=""], :not([author-type])):not([blc-guard-level="1"]):not([blc-guard-level="2"]):not([blc-guard-level="3"]):not([privilegetype="1"]):not([privilegetype="2"]):not([privilegetype="3"])::before,
+yt-live-chat-text-message-renderer:is([author-type=""], :not([author-type])):not([blc-guard-level="1"]):not([blc-guard-level="2"]):not([blc-guard-level="3"]):not([privilegetype="1"]):not([privilegetype="2"]):not([privilegetype="3"])::after {
+  display: none !important;
+  animation: none !important;
+}
+
+/* 三种页面都以 #content 承载文字卡片；彗星号另有一层 #card 包装。 */
+yt-live-chat-text-message-renderer #content {
+  position: relative !important;
+  isolation: isolate;
+  display: block !important;
+  width: max-content !important;
+  min-width: min(500px, 100%) !important;
+  max-width: 100% !important;
+  min-height: 115px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border: solid transparent !important;
+  border-width: 40px 125px 38px 125px !important;
+}
+
+/* 九块 PNG 背景直接拼在 #content 上，避开彗星号预览对 border-image 的漏绘。 */
+yt-live-chat-text-message-renderer #content::before {
+  --medical-card-edge-width: 125px;
+  --medical-card-middle-width: calc(100% - 250px);
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: -40px -125px -38px -125px;
+  pointer-events: none;
+  background-image:
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/top_left.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/top_center.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/top_right.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/middle_left.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/middle_center.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/middle_right.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/bottom_left.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/bottom_center.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/card9/bottom_right.png");
+  background-size:
+    var(--medical-card-edge-width) 40px,
+    var(--medical-card-middle-width) 40px,
+    var(--medical-card-edge-width) 40px,
+    var(--medical-card-edge-width) calc(100% - 76px),
+    var(--medical-card-middle-width) calc(100% - 76px),
+    var(--medical-card-edge-width) calc(100% - 76px),
+    var(--medical-card-edge-width) 38px,
+    var(--medical-card-middle-width) 38px,
+    var(--medical-card-edge-width) 38px;
+  background-position:
+    left top, center top, right top,
+    left center, center center, right center,
+    left bottom, center bottom, right bottom;
+  background-repeat: no-repeat;
+  -webkit-clip-path: inset(100% 0 0 0);
+  clip-path: inset(100% 0 0 0);
+  animation: medical-card-rise-fade 600ms ease-in-out both !important;
+}
+
+yt-live-chat-text-message-renderer #content::after {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  right: -134px;
+  bottom: -50px;
+  width: 105px;
+  height: 82px;
+  pointer-events: none;
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/bandage.png");
+  background-position: -744px -178px;
+  background-size: 901px 300px;
+  background-repeat: no-repeat;
+  transform-origin: center center;
+  animation: medical-bandage-settle 640ms cubic-bezier(0.20, 0.80, 0.20, 1) 900ms both !important;
+}
+
+/* 提督 2、总督 1 共用两张装饰；舰长不显示。参数集中在这里。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) #content {
+  --medical-scope-width: 79px;
+  --medical-scope-height: 54px;
+  --medical-scope-right: -112px;
+  --medical-scope-top: -58px;
+  --medical-ecg-width: 116px;
+  --medical-ecg-height: 18px;
+  --medical-ecg-right: 14px;
+  --medical-ecg-bottom: -30px;
+}
+
+/* 总督专属的小花、下沿徽章位置参数。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [privilegetype="1"]) #content {
+  --medical-governor-flower-box-width: 240px;
+  --medical-governor-flower-box-height: 145px;
+  --medical-governor-flower-extra-right: 28px;
+  --medical-governor-flower-extra-top: 27px;
+  --medical-governor-badge-center-shift: -9px;
+  --medical-governor-badge-vertical-position: -110px;
+}
+
+/* 底框下沿的徽章与右下创可贴共用底框前景，不依赖昵称长度。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [privilegetype="1"]) #content::after {
+  width: calc(100% + 250px);
+  height: 94px;
+  bottom: -62px;
+  background-image:
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/canvas/bandage.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/governor/governor_badge.png");
+  background-size: 901px 300px, 676px 225px;
+  background-position:
+    calc(100% + 52px) -178px,
+    calc(50% + var(--medical-governor-badge-center-shift)) var(--medical-governor-badge-vertical-position);
+  transform-origin: calc(100% - 52px) 50%;
+  animation: medical-governor-badge-fade 640ms ease-out 900ms both !important;
+}
+
+/* 旧版脚本插入的节点不再使用，避免与 CSS 装饰重复。 */
+yt-live-chat-text-message-renderer #content > .medical-guard-decoration {
+  display: none !important;
+}
+
+/* 正文包装层的边缘与 #content 内容区重合，可用伪元素直接锚定底框。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) :is(#image-and-message, #content > #message)::before,
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) :is(#image-and-message, #content > #message)::after {
+  content: "";
+  position: absolute !important;
+  z-index: 0 !important;
+  display: block !important;
+  pointer-events: none !important;
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) :is(#image-and-message, #content > #message)::before {
+  top: var(--medical-scope-top) !important;
+  right: var(--medical-scope-right) !important;
+  width: var(--medical-scope-width) !important;
+  height: var(--medical-scope-height) !important;
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/guard2/stethoscope_gauze.png") !important;
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+  animation: medical-scope-float-in 1050ms ease-in-out 300ms both !important;
+}
+
+/* 总督的小花贴在听诊器组合右侧，按原始透明画布局部取图。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [privilegetype="1"]) :is(#image-and-message, #content > #message)::before {
+  top: calc(var(--medical-scope-top) - var(--medical-governor-flower-extra-top)) !important;
+  right: calc(var(--medical-scope-right) - var(--medical-governor-flower-extra-right)) !important;
+  width: var(--medical-governor-flower-box-width) !important;
+  height: var(--medical-governor-flower-box-height) !important;
+  background-image:
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/governor/governor_flower.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/guard2/stethoscope_gauze.png") !important;
+  background-size: 670px 223px, var(--medical-scope-width) var(--medical-scope-height) !important;
+  background-position: -431px -9px, 133px 27px !important;
+}
+
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) :is(#image-and-message, #content > #message)::after {
+  right: var(--medical-ecg-right) !important;
+  bottom: var(--medical-ecg-bottom) !important;
+  width: var(--medical-ecg-width) !important;
+  height: var(--medical-ecg-height) !important;
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/guard2/ecg_line.png") !important;
+  animation: medical-ecg-reveal 1100ms ease-in-out 350ms both !important;
+}
+
+yt-live-chat-text-message-renderer #image-and-message {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 0 0 13px !important;
+  border: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+}
+
+yt-live-chat-text-message-renderer #message {
+  position: relative !important;
+  z-index: 1;
+  display: block !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+
+/* 页面没有 #image-and-message 时，给直接放在 #content 的正文补同样的左边距。 */
+yt-live-chat-text-message-renderer #content > #message {
+  padding-left: 13px !important;
+}
+
+yt-live-chat-text-message-renderer #message {
+  color: #5b7489 !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  text-shadow: none !important;
+  animation: medical-message-reveal 560ms ease-out 620ms both !important;
+}
+
+/* BLiveChat 的 #message 直接承载贴图伪元素。原入场动画的 clip-path
+   在结束后仍裁掉框外贴图，因此仅对提督/总督的直连正文改用无裁切渐显。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) #content > #message {
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+  animation: medical-message-reveal-unclipped 560ms ease-out 620ms both !important;
+}
+
+/* 待正文整体显现后再播放贴图自身动画，避免被正文的透明度盖住。 */
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) #content > #message::before,
+yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) #content > #message::after {
+  animation-delay: 760ms !important;
+}
+
+yt-live-chat-text-message-renderer yt-live-chat-author-chip {
+  position: absolute !important;
+  z-index: 5 !important;
+  left: -72px !important;
+  top: -57px !important;
+  display: block !important;
+  width: max-content !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  transform: rotate(-2.8deg);
+  transform-origin: left top !important;
+  -webkit-clip-path: inset(0 100% 0 0);
+  clip-path: inset(0 100% 0 0);
+  animation: medical-name-fade 1500ms ease-in-out 120ms both !important;
+}
+
+yt-live-chat-text-message-renderer #author-name {
+  position: relative !important;
+  isolation: isolate;
+  display: block !important;
+  box-sizing: border-box !important;
+  width: max-content !important;
+  min-width: 260px !important;
+  max-width: min(600px, calc(100vw - 130px)) !important;
+  height: 53px !important;
+  margin: 0 !important;
+  padding: 14px 100px 0 44px !important;
+  color: #5c7891 !important;
+  font-size: 21px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-shadow: 0 1px 0 #fff !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+yt-live-chat-text-message-renderer #author-name::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  /* 三段独立 PNG：十字固定，中央延长，圆角和蓝色尾片固定。 */
+  background-image:
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/name3/left.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/name3/right.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/main/assets/medical_ui_assets/slices/name3/middle.png");
+  background-size: 59px 53px, 120px 53px, calc(100% - 177px) 53px;
+  background-position: left top, right top, 58px top;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+yt-live-chat-text-message-renderer :is(#author-photo, #chat-medal, #chat-badges, #chip-badges, yt-live-chat-author-medal-renderer, #timestamp) {
+  display: none !important;
+}
+
+yt-live-chat-text-message-renderer .emoji {
+  display: inline-block !important;
+  width: 1.25em !important;
+  height: 1.25em !important;
+  object-fit: contain !important;
+  vertical-align: -0.2em !important;
+}
+
+yt-live-chat-text-message-renderer .emoji.blc-large-emoji {
+  width: 2.5em !important;
+  height: 2.5em !important;
+}
+
+/* 窄弹幕窗口使用小一号的边框切片，端部和装饰仍保持固定尺寸。 */
+@container (max-width: 600px) {
+  yt-live-chat-text-message-renderer #content {
+    border-width: 40px 90px 38px 90px !important;
+  }
+
+  yt-live-chat-text-message-renderer #content::after { right: -99px; }
+  yt-live-chat-text-message-renderer #content::before {
+    --medical-card-edge-width: 90px;
+    --medical-card-middle-width: calc(100% - 180px);
+    inset: -40px -90px -38px -90px;
+  }
+  yt-live-chat-text-message-renderer yt-live-chat-author-chip { left: -37px !important; }
+  yt-live-chat-text-message-renderer #author-name { max-width: 360px !important; }
+  yt-live-chat-text-message-renderer #image-and-message { padding-left: 45px !important; }
+  yt-live-chat-text-message-renderer #content > #message { padding-left: 45px !important; }
+  yt-live-chat-text-message-renderer #message { font-size: 23px !important; }
+  yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) #content {
+    --medical-scope-right: -77px;
+  }
+}
+
+/* 较旧的浏览器若不支持容器查询，窄 OBS 视口仍按同一尺寸收边。 */
+@media (max-width: 600px) {
+  yt-live-chat-text-message-renderer #content {
+    border-width: 40px 90px 38px 90px !important;
+  }
+  yt-live-chat-text-message-renderer #content::after { right: -99px; }
+  yt-live-chat-text-message-renderer #content::before {
+    --medical-card-edge-width: 90px;
+    --medical-card-middle-width: calc(100% - 180px);
+    inset: -40px -90px -38px -90px;
+  }
+  yt-live-chat-text-message-renderer yt-live-chat-author-chip { left: -37px !important; }
+  yt-live-chat-text-message-renderer #author-name { max-width: 360px !important; }
+  yt-live-chat-text-message-renderer #image-and-message { padding-left: 45px !important; }
+  yt-live-chat-text-message-renderer #content > #message { padding-left: 45px !important; }
+  yt-live-chat-text-message-renderer #message { font-size: 23px !important; }
+  yt-live-chat-text-message-renderer:is([blc-guard-level="1"], [blc-guard-level="2"], [privilegetype="1"], [privilegetype="2"]) #content {
+    --medical-scope-right: -77px;
+  }
+}
+
+/* 整条消息弹起；底框和昵称使用 clip-path 揭示，避开部分网页内核的 mask 动画故障。 */
+@keyframes medical-danmaku-enter {
+  0%   { opacity: 0; transform: translateY(32px) scale(0.94) rotate(-1.3deg); }
+  12%  { opacity: 1; }
+  60%  { transform: translateY(-7px) scale(1.025) rotate(0.35deg); }
+  80%  { transform: translateY(2px) scale(0.995) rotate(-0.15deg); }
+  100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+}
+
+@keyframes medical-card-rise-fade {
+  0%   { opacity: 0; -webkit-clip-path: inset(100% 0 0 0); clip-path: inset(100% 0 0 0); }
+  55%  { opacity: 0.75; }
+  100% { opacity: 1; -webkit-clip-path: inset(0 0 0 0); clip-path: inset(0 0 0 0); }
+}
+
+@keyframes medical-name-fade {
+  0%   { opacity: 0; -webkit-clip-path: inset(0 100% 0 0); clip-path: inset(0 100% 0 0); }
+  55%  { opacity: 0.75; }
+  100% { opacity: 1; -webkit-clip-path: inset(0 0 0 0); clip-path: inset(0 0 0 0); }
+}
+
+@keyframes medical-message-reveal {
+  0%   { opacity: 0; clip-path: inset(0 100% 0 0); transform: translateX(-10px); }
+  20%  { opacity: 1; }
+  100% { opacity: 1; clip-path: inset(0 0 0 0); transform: translateX(0); }
+}
+
+@keyframes medical-message-reveal-unclipped {
+  0%   { opacity: 0; transform: translateX(-10px); }
+  20%  { opacity: 1; }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes medical-ecg-reveal {
+  0%   { opacity: 0; -webkit-clip-path: inset(0 100% 0 0); clip-path: inset(0 100% 0 0); }
+  55%  { opacity: 0.7; }
+  100% { opacity: 1; -webkit-clip-path: inset(0 0 0 0); clip-path: inset(0 0 0 0); }
+}
+
+/* 整张听诊器从右上沿对角线移到原位，同时整体透明度从 0 变为 1。 */
+@keyframes medical-scope-float-in {
+  0% {
+    opacity: 0;
+    transform: translate(20px, -20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes medical-bag-sway {
+  0%, 100% { transform: rotate(-7deg); }
+  50%      { transform: rotate(7deg); }
+}
+
+@keyframes medical-tube-flex {
+  0%, 100% { transform: skewX(-9deg); }
+  50%      { transform: skewX(9deg); }
+}
+
+@keyframes medical-bandage-settle {
+  0%   { opacity: 0; transform: translateY(-25px) rotate(-22deg) scale(1.2); }
+  65%  { opacity: 1; transform: translateY(5px) rotate(5deg) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
+}
+
+/* 总督的徽章与创可贴共用前景层，仅作透明度渐显，不再随创可贴转动。 */
+@keyframes medical-governor-badge-fade {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+
+/* 欢迎上舰：只匹配大航海购买通知，不影响文字弹幕、礼物或 SC。 */
+yt-live-chat-membership-item-renderer {
+  --welcome-backplates: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/backplates.png");
+  --welcome-title: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/welcome_title.png");
+  --welcome-title-captain: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/1398d3e863737e63bbbb0c0ce865be7267fb399e/assets/welcome_layers_13/captain_title.png");
+  --welcome-title-admiral: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/5d1f58844d76184a60a8467913871b2af49266b0/assets/welcome_layers_13/admiral_title.png");
+  --welcome-title-governor: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/5d1f58844d76184a60a8467913871b2af49266b0/assets/welcome_layers_13/governor_title.png");
+  --welcome-iv-bag: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/iv_bag.png");
+  --welcome-iv-tube: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/iv_tube.png");
+  --welcome-stethoscope: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/stethoscope.png");
+  --welcome-gauze: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/gauze.png");
+  --welcome-bandage: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/bandage.png");
+  --welcome-ecg: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/ecg_line.png");
+  --welcome-cross-left: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/medical_cross_left.png");
+  --welcome-cross-right: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/medical_cross_right.png");
+  --welcome-accents-left: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/accents_left.png");
+  --welcome-accents-right: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/accents_right.png");
+  --welcome-accents-other: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/9b24aa0cb7100d499e7cdd2afece80652625a8dd/assets/welcome_layers_13/accents_other.png");
+  display: block !important;
+  width: 100% !important;
+  margin: 16px 0 22px !important;
+  overflow: visible !important;
+  font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif !important;
+}
+
+/* BLiveChat 的购买等级：3＝舰长，2＝提督，1＝总督；未标注时沿用原“欢迎上舰”。 */
+yt-live-chat-membership-item-renderer[blc-guard-level="3"] {
+  --welcome-title: var(--welcome-title-captain);
+}
+
+yt-live-chat-membership-item-renderer[blc-guard-level="2"] {
+  --welcome-title: var(--welcome-title-admiral);
+}
+
+yt-live-chat-membership-item-renderer[blc-guard-level="1"] {
+  --welcome-title: var(--welcome-title-governor);
+}
+
+/* 所有素材保留原始画布坐标；卡片宽度变化时，13 层按同一比例缩放。 */
+yt-live-chat-membership-item-renderer #card {
+  position: relative !important;
+  isolation: isolate;
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  padding: 33.30078125% 0 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  background-color: transparent !important;
+  background-image:
+    var(--welcome-accents-other),
+    var(--welcome-accents-right),
+    var(--welcome-accents-left),
+    var(--welcome-ecg),
+    var(--welcome-backplates) !important;
+  background-position: center top !important;
+  background-size: 100% auto !important;
+  background-repeat: no-repeat !important;
+  animation: medical-welcome-enter 700ms ease-out both !important;
+}
+
+yt-live-chat-membership-item-renderer #card::before,
+yt-live-chat-membership-item-renderer #card::after,
+yt-live-chat-membership-item-renderer #header::before,
+yt-live-chat-membership-item-renderer #header::after,
+yt-live-chat-membership-item-renderer #header-content::before,
+yt-live-chat-membership-item-renderer #header-content::after {
+  content: "";
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  box-sizing: border-box !important;
+  display: block !important;
+  width: 100% !important;
+  height: 0 !important;
+  padding-top: 33.30078125% !important;
+  pointer-events: none !important;
+  background-position: center top !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+}
+
+yt-live-chat-membership-item-renderer #card::before {
+  z-index: 1;
+  background-image: var(--welcome-title) !important;
+  animation: medical-welcome-title 850ms cubic-bezier(.18,.8,.2,1) 160ms both !important;
+}
+
+yt-live-chat-membership-item-renderer #card::after {
+  z-index: 2;
+  background-image: var(--welcome-iv-bag), var(--welcome-iv-tube) !important;
+  transform-origin: 18.5% 17%;
+  animation: medical-welcome-left 900ms ease-out 290ms both !important;
+}
+
+/* 伪元素仍以 #card 为定位父级；图案下方只保留独立的昵称牌。 */
+yt-live-chat-membership-item-renderer #header {
+  position: static !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  min-height: 0 !important;
+  padding: 0 18px 16px !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  background: transparent !important;
+  color: #6587a6 !important;
+}
+
+yt-live-chat-membership-item-renderer #header::before {
+  z-index: 2;
+  background-image: var(--welcome-stethoscope), var(--welcome-gauze) !important;
+  animation: medical-welcome-right 950ms ease-out 380ms both !important;
+}
+
+yt-live-chat-membership-item-renderer #header::after {
+  z-index: 3;
+  background-image: var(--welcome-bandage) !important;
+  animation: medical-welcome-bandage 560ms ease-out 850ms both !important;
+}
+
+/* 两枚十字单独占据原画布坐标，分别从中心轻弹出来。 */
+yt-live-chat-membership-item-renderer #header-content {
+  position: static !important;
+  display: flex !important;
+  flex: 1 1 auto !important;
+  justify-content: center !important;
+  min-width: 0 !important;
+  background: transparent !important;
+}
+
+yt-live-chat-membership-item-renderer #header-content::before {
+  z-index: 3;
+  background-image: var(--welcome-cross-left) !important;
+  transform-origin: 10.1% 51.3%;
+  animation:
+    medical-welcome-cross-pop 650ms cubic-bezier(.2,1.3,.35,1) 720ms both,
+    medical-welcome-cross-float-left 3.6s ease-in-out 1500ms infinite !important;
+}
+
+yt-live-chat-membership-item-renderer #header-content::after {
+  z-index: 3;
+  background-image: var(--welcome-cross-right) !important;
+  transform-origin: 91.5% 53.2%;
+  animation:
+    medical-welcome-cross-pop 650ms cubic-bezier(.2,1.3,.35,1) 940ms both,
+    medical-welcome-cross-float-right 3.6s ease-in-out 1720ms infinite !important;
+}
+
+yt-live-chat-membership-item-renderer #header-content-primary-column,
+yt-live-chat-membership-item-renderer #header-content-inner-column {
+  position: relative !important;
+  z-index: 4 !important;
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+  background: transparent !important;
+}
+
+yt-live-chat-membership-item-renderer #author-name {
+  display: block !important;
+  box-sizing: border-box !important;
+  min-width: 180px !important;
+  max-width: min(560px, calc(100vw - 48px)) !important;
+  padding: 8px 24px !important;
+  border: 2px solid #a8c8e7 !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, #fffefa, #f4fbff 70%, #e3f1fd) !important;
+  box-shadow: 0 3px 0 #78a8d2, 0 7px 16px #385f8560, inset 0 2px 2px #fff !important;
+  color: #4e7ba5 !important;
+  font-family: "Arial Rounded MT Bold", "Microsoft YaHei", "PingFang SC", sans-serif !important;
+  font-size: clamp(18px, 2.8vw, 28px) !important;
+  font-weight: 900 !important;
+  line-height: 1.25 !important;
+  letter-spacing: .04em !important;
+  text-align: center !important;
+  text-shadow: 0 1px 0 #fff, 0 2px 2px #9cb9d2 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+yt-live-chat-membership-item-renderer #header-subtext {
+  display: none !important;
+}
+
+/* 上舰通知只显示画面和昵称牌，隐藏平台自带的头像与勋章。 */
+yt-live-chat-membership-item-renderer #author-photo,
+yt-live-chat-membership-item-renderer #chat-badges,
+yt-live-chat-membership-item-renderer #chip-badges,
+yt-live-chat-membership-item-renderer yt-live-chat-author-badge-renderer {
+  display: none !important;
+}
+
+yt-live-chat-membership-item-renderer #timestamp {
+  display: none !important;
+}
+
+@keyframes medical-welcome-enter {
+  from { opacity: 0; transform: translateY(14px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes medical-welcome-title {
+  from { opacity: 0; transform: translateY(13px) scale(.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes medical-welcome-left {
+  from { opacity: 0; transform: translate(-14px, -7px) rotate(-2deg); }
+  to   { opacity: 1; transform: translate(0, 0) rotate(0); }
+}
+
+@keyframes medical-welcome-right {
+  from { opacity: 0; transform: translate(15px, -12px); }
+  to   { opacity: 1; transform: translate(0, 0); }
+}
+
+@keyframes medical-welcome-bandage {
+  from { opacity: 0; transform: translate(13px, -10px) rotate(-4deg); }
+  to   { opacity: 1; transform: translate(0, 0) rotate(0); }
+}
+
+@keyframes medical-welcome-cross-pop {
+  0%   { opacity: 0; transform: scale(.65) rotate(-8deg); }
+  70%  { opacity: 1; transform: scale(1.08) rotate(2deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+@keyframes medical-welcome-cross-float-left {
+  0%, 100% { transform: translateY(0) rotate(0) scale(1); }
+  45%      { transform: translateY(-3px) rotate(-3deg) scale(1.04); }
+}
+
+@keyframes medical-welcome-cross-float-right {
+  0%, 100% { transform: translateY(0) rotate(0) scale(1); }
+  55%      { transform: translateY(-3px) rotate(3deg) scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  yt-live-chat-membership-item-renderer #card,
+  yt-live-chat-membership-item-renderer #card::before,
+  yt-live-chat-membership-item-renderer #card::after,
+  yt-live-chat-membership-item-renderer #header::before,
+  yt-live-chat-membership-item-renderer #header::after,
+  yt-live-chat-membership-item-renderer #header-content::before,
+  yt-live-chat-membership-item-renderer #header-content::after {
+    animation: none !important;
+  }
+}
+
+
+/* 礼物感谢卡：头像、两侧医疗十字、昵称牌和三段式礼物框。 */
+medical-gift-renderer {
+  display: block;
+  box-sizing: border-box;
+  width: min(760px, 100%);
+  margin: 24px auto 34px;
+  padding: 0 12px 8px;
+  color: #527b9f;
+  font-family: "Arial Rounded MT Bold", "Microsoft YaHei", "PingFang SC", sans-serif;
+  text-align: center;
+  overflow: visible;
+  animation: medical-gift-enter 720ms ease-out both;
+}
+
+medical-gift-renderer *,
+medical-gift-renderer *::before,
+medical-gift-renderer *::after { box-sizing: border-box; }
+
+medical-gift-renderer .medical-gift-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 4vw, 30px);
+  min-height: 152px;
+}
+
+medical-gift-renderer .medical-gift-avatar {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: clamp(106px, 18vw, 138px);
+  height: clamp(106px, 18vw, 138px);
+  padding: 9px;
+  border: 4px solid #b6d6f0;
+  border-radius: 50%;
+  background: linear-gradient(140deg, #fffefa, #e2f3ff 58%, #86b8e4);
+  box-shadow: 0 0 0 3px #f6fcff, 0 6px 0 #80add4,
+    0 11px 22px #315c8144, inset 0 2px 5px #fff;
+  animation: medical-gift-avatar-in 760ms cubic-bezier(.2,1.25,.35,1) 100ms both;
+}
+
+medical-gift-renderer .medical-gift-avatar::before {
+  content: "✚";
+  position: absolute;
+  inset: 9px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e9f6ff;
+  color: #9dc5e6;
+  font-size: 42px;
+}
+
+medical-gift-renderer .medical-gift-avatar img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #e9f6ff;
+}
+
+medical-gift-renderer .medical-gift-plus {
+  flex: none;
+  display: block;
+  width: 90px;
+  height: 96px;
+  background-repeat: no-repeat;
+  background-size: 737px 246px;
+  pointer-events: none;
+  animation: medical-gift-plus-in 680ms cubic-bezier(.2,1.35,.35,1) 350ms both;
+}
+
+medical-gift-renderer .medical-gift-plus.left {
+  background-image:
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4d955e7c4074e9760ccde69dae47823eb11bbdce/assets/welcome_layers_13/medical_cross_left.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4d955e7c4074e9760ccde69dae47823eb11bbdce/assets/welcome_layers_13/accents_left.png");
+  background-position: -29px -72px, -29px -72px;
+}
+
+medical-gift-renderer .medical-gift-plus.right {
+  background-image:
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4d955e7c4074e9760ccde69dae47823eb11bbdce/assets/welcome_layers_13/medical_cross_right.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4d955e7c4074e9760ccde69dae47823eb11bbdce/assets/welcome_layers_13/accents_right.png");
+  background-position: -637px -83px, -637px -83px;
+  animation-delay: 480ms;
+}
+
+medical-gift-renderer .medical-gift-name {
+  display: block;
+  width: max-content;
+  min-width: 180px;
+  max-width: min(560px, 100%);
+  margin: 4px auto 17px;
+  padding: 8px 24px;
+  border: 2px solid #a8c8e7;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fffefa, #f4fbff 70%, #e3f1fd);
+  box-shadow: 0 3px 0 #78a8d2, 0 7px 16px #385f8560, inset 0 2px 2px #fff;
+  color: #4e7ba5;
+  font-size: clamp(18px, 2.8vw, 28px);
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: .04em;
+  text-shadow: 0 1px 0 #fff, 0 2px 2px #9cb9d2;
+  overflow-wrap: anywhere;
+  animation: medical-gift-name-in 900ms ease-out 300ms both;
+}
+
+medical-gift-renderer .medical-gift-plate {
+  --gift-frame-height: clamp(96px, 14vw, 146px);
+  --gift-frame-edge: clamp(110px, 16vw, 167px);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: var(--gift-frame-height);
+  margin: auto;
+  padding: 16px 42px 22px;
+  animation: medical-gift-plate-in 650ms ease-out 580ms both;
+}
+
+medical-gift-renderer .medical-gift-plate::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-image:
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4d955e7c4074e9760ccde69dae47823eb11bbdce/assets/gift/frame_left.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4d955e7c4074e9760ccde69dae47823eb11bbdce/assets/gift/frame_right.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4d955e7c4074e9760ccde69dae47823eb11bbdce/assets/gift/frame_middle.png");
+  background-position: left top, right top, center top;
+  background-size:
+    var(--gift-frame-edge) 100%,
+    var(--gift-frame-edge) 100%,
+    calc(100% - var(--gift-frame-edge) - var(--gift-frame-edge)) 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+medical-gift-renderer .medical-gift-line {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(5px, 1.2vw, 13px);
+  width: 100%;
+  min-width: 0;
+  color: #527b9f;
+  font-size: clamp(18px, 2.65vw, 28px);
+  font-weight: 900;
+  line-height: 1.2;
+  text-shadow: 0 1px 0 #fff, 0 2px 2px #9cb9d2;
+  white-space: nowrap;
+}
+
+medical-gift-renderer .medical-gift-gift-name {
+  min-width: 0;
+  max-width: 12em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+medical-gift-renderer .medical-gift-icon {
+  flex: none;
+  display: block;
+  width: clamp(32px, 5vw, 56px);
+  height: clamp(32px, 5vw, 56px);
+  object-fit: contain;
+}
+
+medical-gift-renderer .medical-gift-count { flex: none; }
+
+@keyframes medical-gift-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes medical-gift-avatar-in {
+  from { opacity: 0; transform: scale(.77); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes medical-gift-plus-in {
+  from { opacity: 0; transform: scale(.7) rotate(-8deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+@keyframes medical-gift-name-in {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes medical-gift-plate-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  medical-gift-renderer .medical-gift-top { min-height: 120px; gap: 4px; }
+  medical-gift-renderer .medical-gift-plus {
+    width: 72px;
+    height: 77px;
+    background-size: 590px 196px;
+  }
+  medical-gift-renderer .medical-gift-plus.left { background-position: -23px -58px, -23px -58px; }
+  medical-gift-renderer .medical-gift-plus.right { background-position: -510px -66px, -510px -66px; }
+  medical-gift-renderer .medical-gift-avatar { width: 104px; height: 104px; }
+  medical-gift-renderer .medical-gift-plate { padding: 10px 31px 17px; }
+  medical-gift-renderer .medical-gift-gift-name { max-width: 7em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  medical-gift-renderer,
+  medical-gift-renderer .medical-gift-avatar,
+  medical-gift-renderer .medical-gift-plus,
+  medical-gift-renderer .medical-gift-name,
+  medical-gift-renderer .medical-gift-plate { animation: none; }
+}
+
+  </style>
+  <style>
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent; }
+    body { display: flex; align-items: center; justify-content: flex-end; flex-direction: column; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; }
+    #items { width: min(960px, 100%); max-height: 100%; overflow-x: hidden; overflow-y: auto; scrollbar-width: none; }
+    #items::-webkit-scrollbar { display: none; }
+    yt-live-chat-membership-item-renderer #card { width: 100% !important; }
+    .medical-item-leave { animation: medical-item-leave 360ms ease-in both !important; }
+    @keyframes medical-item-leave { to { opacity: 0; transform: translateY(-12px); } }
+  </style>
+</head>
+<body>
+  <main id="items" aria-live="polite"></main>
+  <script>
+    (() => {
+      const items = document.getElementById('items');
+      const guardLabels = { 1: '总督', 2: '提督', 3: '舰长' };
+      const params = new URLSearchParams(location.search);
+      let showingDemo = false;
+      const messages = new Map();
+
+      function text(value, fallback = '') {
+        return value == null ? fallback : String(value);
+      }
+
+      function safeImageUrl(value) {
+        try {
+          const url = new URL(text(value));
+          return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : '';
+        } catch { return ''; }
+      }
+
+      function createTextMessage(data) {
+        if (!data || typeof data !== 'object' || (data.platform && data.platform !== 'bili')) return null;
+        const messageText = text(data.message);
+        const emojiUrl = Number(data.dmType) === 1 ? safeImageUrl(data.emojiImgUrl) : '';
+        if (!messageText && !emojiUrl) return null;
+
+        const item = document.createElement('yt-live-chat-text-message-renderer');
+        const level = Number(data.guardLevel);
+        const validLevel = level === 1 || level === 2 || level === 3 ? level : 0;
+        item.setAttribute('blc-guard-level', String(validLevel));
+        item.setAttribute('author-type', data.isAnchor ? 'owner' : data.isModerator ? 'moderator' : validLevel ? 'member' : '');
+
+        const card = document.createElement('div');
+        card.id = 'card';
+        const content = document.createElement('div');
+        content.id = 'content';
+        const chip = document.createElement('yt-live-chat-author-chip');
+        const name = document.createElement('span');
+        name.id = 'author-name';
+        name.textContent = text(data.uname, '观众').slice(0, 100);
+        chip.append(name);
+
+        const wrapper = document.createElement('div');
+        wrapper.id = 'image-and-message';
+        const message = document.createElement('span');
+        message.id = 'message';
+        if (emojiUrl) {
+          const image = document.createElement('img');
+          image.className = 'emoji blc-large-emoji';
+          image.src = emojiUrl;
+          image.alt = messageText || '[表情]';
+          image.referrerPolicy = 'no-referrer';
+          message.append(image);
+        } else {
+          message.textContent = messageText;
+        }
+        wrapper.append(message);
+        content.append(chip, wrapper);
+        card.append(content);
+        item.append(card);
+        return item;
+      }
+
+      function createGuardNotification(data) {
+        if (!data || typeof data !== 'object' || (data.platform && data.platform !== 'bili')) return null;
+        const level = Number(data.guardLevel);
+        if (!guardLabels[level]) return null;
+
+        const item = document.createElement('yt-live-chat-membership-item-renderer');
+        item.setAttribute('show-only-header', '');
+        item.setAttribute('blc-guard-level', String(level));
+        const nameText = text(data.uname, '舰队成员').slice(0, 100);
+        item.setAttribute('aria-label', `${nameText}${text(data.action, '开通').slice(0, 16)}${guardLabels[level]}`);
+
+        const card = document.createElement('div');
+        card.id = 'card';
+        const header = document.createElement('div');
+        header.id = 'header';
+        const headerContent = document.createElement('div');
+        headerContent.id = 'header-content';
+        const primary = document.createElement('div');
+        primary.id = 'header-content-primary-column';
+        const inner = document.createElement('div');
+        inner.id = 'header-content-inner-column';
+        const name = document.createElement('span');
+        name.id = 'author-name';
+        name.textContent = nameText;
+        inner.append(name);
+        primary.append(inner);
+        headerContent.append(primary);
+        header.append(headerContent);
+        card.append(header);
+        item.append(card);
+        return item;
+      }
+
+      function createGiftNotification(data) {
+        if (!data || typeof data !== 'object' || (data.platform && data.platform !== 'bili')) return null;
+        const item = document.createElement('medical-gift-renderer');
+        const top = document.createElement('div');
+        top.className = 'medical-gift-top';
+        const left = document.createElement('span');
+        left.className = 'medical-gift-plus left';
+        const right = document.createElement('span');
+        right.className = 'medical-gift-plus right';
+        const avatar = document.createElement('div');
+        avatar.className = 'medical-gift-avatar';
+        const faceUrl = safeImageUrl(data.face);
+        if (faceUrl) {
+          const image = document.createElement('img');
+          image.src = faceUrl;
+          image.alt = '';
+          image.referrerPolicy = 'no-referrer';
+          avatar.append(image);
+        }
+        top.append(left, avatar, right);
+
+        const nickname = document.createElement('div');
+        nickname.className = 'medical-gift-name';
+        nickname.textContent = text(data.uname, '观众').slice(0, 100);
+
+        const plate = document.createElement('div');
+        plate.className = 'medical-gift-plate';
+        const line = document.createElement('div');
+        line.className = 'medical-gift-line';
+        const prefix = document.createElement('span');
+        prefix.textContent = '赠送的';
+        const giftName = document.createElement('span');
+        giftName.className = 'medical-gift-gift-name';
+        giftName.textContent = text(data.giftName, '礼物').slice(0, 80);
+        line.append(prefix, giftName);
+        const iconUrl = safeImageUrl(data.giftIcon);
+        if (iconUrl) {
+          const icon = document.createElement('img');
+          icon.className = 'medical-gift-icon';
+          icon.src = iconUrl;
+          icon.alt = '';
+          icon.referrerPolicy = 'no-referrer';
+          line.append(icon);
+        }
+        const count = document.createElement('span');
+        count.className = 'medical-gift-count';
+        const quantity = Math.max(1, Math.floor(Number(data.giftNum) || 1));
+        count.textContent = `×${quantity}`;
+        line.append(count);
+        plate.append(line);
+        item.append(top, nickname, plate);
+        return item;
+      }
+
+      function appendItem(item, lifetime) {
+        if (!item) return;
+        items.append(item);
+        while (items.children.length > 8) items.firstElementChild.remove();
+        items.scrollTop = items.scrollHeight;
+        if (lifetime) window.setTimeout(() => {
+          if (!item.isConnected) return;
+          item.classList.add('medical-item-leave');
+          window.setTimeout(() => item.remove(), 380);
+        }, lifetime);
+      }
+
+
+      function addMessage(msg) {
+        if (!msg || typeof msg !== 'object') return;
+        let item = null;
+        if (msg.type === 0) {
+          const hasImage = Array.isArray(msg.contentParts) &&
+            msg.contentParts.some(part => part && part.type === 1);
+          item = createTextMessage({
+            platform: 'bili', uname: msg.authorName,
+            message: msg.content || (hasImage ? '[表情]' : ''),
+            guardLevel: msg.privilegeType,
+            isAnchor: msg.authorType === 3,
+            isModerator: msg.authorType === 2
+          });
+          if (item && Array.isArray(msg.contentParts) && msg.contentParts.length) {
+            const message = item.querySelector('#message');
+            message.replaceChildren();
+            for (const part of msg.contentParts) {
+              if (!part) continue;
+              if (part.type === 1) {
+                const url = safeImageUrl(part.url);
+                if (url) {
+                  const image = document.createElement('img');
+                  image.className = 'emoji';
+                  image.src = url;
+                  image.alt = text(part.text, '[表情]');
+                  image.referrerPolicy = 'no-referrer';
+                  message.append(image);
+                } else message.append(document.createTextNode(text(part.text)));
+              } else if (part.type === 0) {
+                message.append(document.createTextNode(text(part.text)));
+              }
+            }
+          }
+        } else if (msg.type === 1) {
+          item = createGiftNotification({
+            platform: 'bili', uname: msg.authorName, face: msg.avatarUrl,
+            giftName: msg.giftName, giftIcon: msg.giftIconUrl, giftNum: msg.num
+          });
+        } else if (msg.type === 2) {
+          item = createGuardNotification({
+            platform: 'bili', uname: msg.authorName,
+            guardLevel: msg.privilegeType, action: '开通'
+          });
+        }
+        if (item && msg.id != null) item.dataset.messageId = String(msg.id);
+        if (item && msg.id != null) messages.set(String(msg.id), { ...msg });
+        if (messages.size > 128) messages.delete(messages.keys().next().value);
+        if (item && showingDemo) { items.replaceChildren(); showingDemo = false; }
+        appendItem(item, msg.type === 1 || msg.type === 2 ? 8000 : 0);
+      }
+
+      window.addEventListener('message', event => {
+        if (event.source !== window.parent || !event.data) return;
+        const { type, data } = event.data;
+        if (type === 'blcAddMsg') addMessage(data);
+        if (type === 'blcUpdateMsg' && data && data.id != null) {
+          const id = String(data.id);
+          const previous = messages.get(id);
+          if (previous && data.newValuesObj && typeof data.newValuesObj === 'object') {
+            Object.assign(previous, data.newValuesObj);
+            const item = Array.from(items.children).find(node => node.dataset.messageId === id);
+            if (item && previous.type === 1) {
+              const count = item.querySelector('.medical-gift-count');
+              const giftName = item.querySelector('.medical-gift-gift-name');
+              if (count) count.textContent = '×' + Math.max(1, Math.floor(Number(previous.num) || 1));
+              if (giftName) giftName.textContent = text(previous.giftName, '礼物').slice(0, 80);
+            }
+          }
+        }
+        if (type === 'blcDelMsgs' && data && Array.isArray(data.ids)) {
+          const ids = new Set(data.ids.map(String));
+          ids.forEach(id => messages.delete(id));
+          items.querySelectorAll('[data-message-id]').forEach(node => {
+            if (ids.has(node.dataset.messageId)) node.remove();
+          });
+        }
+      });
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'blcTemplateConnect', data: null }, '*');
+      }
+
+      if (params.has('demo')) {
+        showingDemo = true;
+        addMessage({ type: 0, authorName: '普通观众', content: '今天也要开心呀！', privilegeType: 0 });
+        addMessage({ type: 0, authorName: '提督', content: '提督消息示例', privilegeType: 2 });
+        addMessage({ type: 2, authorName: '奶酪cheese', privilegeType: 3 });
+        addMessage({ type: 1, authorName: '送礼物的小伙伴', giftName: '小花花', num: 1 });
+      }
+    })();
+  </script>
+</body>
+</html>
