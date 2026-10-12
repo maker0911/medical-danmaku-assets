@@ -758,6 +758,8 @@ yt-live-chat-membership-item-renderer #timestamp {
       const CLEAR = 'CLEAR_DATA';
       const guardLabels = { 1: '总督', 2: '提督', 3: '舰长' };
       const items = document.getElementById('items');
+      const params = new URLSearchParams(location.search);
+      let showingDemo = false;
 
       function text(value, fallback = '') {
         return value == null ? fallback : String(value);
@@ -862,16 +864,21 @@ yt-live-chat-membership-item-renderer #timestamp {
         if (event.source !== window.parent) return;
         const envelope = event.data;
         if (!envelope || envelope.category !== 'event') return;
-        if (envelope.type === CLEAR) { items.replaceChildren(); return; }
+        if (envelope.type === CLEAR) { items.replaceChildren(); showingDemo = false; return; }
         const data = Array.isArray(envelope.args) ? envelope.args[0] : null;
+        if ((envelope.type === DM || envelope.type === GUARD) && showingDemo) {
+          items.replaceChildren();
+          showingDemo = false;
+        }
         if (envelope.type === DM) appendItem(createTextMessage(data));
         if (envelope.type === GUARD) appendItem(createGuardNotification(data), 8000);
       });
 
       window.parent.postMessage({ fun: 'subscribe', args: [DM, GUARD, CLEAR] }, '*');
 
-      // 本地预览：打开此文件并在地址末尾加 ?demo=1。
-      if (new URLSearchParams(location.search).has('demo')) {
+      // 本地 ?demo=1 与彗星号配置画布 env=1 显示模拟消息，收到真实消息即清除。
+      if (params.has('demo') || params.get('env') === '1') {
+        showingDemo = true;
         const samples = [
           { uname: '普通观众', message: '今天也要开心呀！', guardLevel: 0, platform: 'bili' },
           { uname: '一位昵称很长的舰长', message: '这是舰长的多行弹幕，文字会自动换行，底框也会随内容增高。', guardLevel: 3, platform: 'bili' },

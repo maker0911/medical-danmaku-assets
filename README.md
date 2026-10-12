@@ -6,7 +6,7 @@
 
 打开 `welcome-ship-preview.html` 可看舰长、提督、总督效果并重播动画。`welcome-ship.css` 是这部分的独立 CSS，已同步附加到完整的 `bilibili.css`；粘贴完整 CSS 时不用再次粘贴独立文件。图片使用公开仓库固定版本的绝对 URL，预览页则改用本地图片路径。BLiveChat 上舰通知的 `blc-guard-level` 属性区分 3＝舰长、2＝提督、1＝总督；小fa朵若复用同结构便会匹配，需在平台预览确认。
 
-彗星号开发文档把用户文字弹幕定义为 `LIVE_OPEN_PLATFORM_DM`，大航海开通或续费定义为 `LIVE_OPEN_PLATFORM_GUARD`。上传 `huixinghao-all.html` 即可在同一插件页面显示现有的普通、舰长、提督、总督、房管文字弹幕和三档上舰通知；文件已内嵌完整 CSS，不需额外粘贴样式。它还订阅 `CLEAR_DATA` 来清空画面。其他事件类型没有设计，本模板不会显示。若原弹幕插件也显示这些消息，应关闭原显示以避免重复。打开本地 `huixinghao-all.html?demo=1` 可看七条模拟消息；真实消息由彗星号父页面发送。旧文件 `huixinghao-welcome.html` 仍是仅显示上舰通知的版本。
+彗星号开发文档把用户文字弹幕定义为 `LIVE_OPEN_PLATFORM_DM`，大航海开通或续费定义为 `LIVE_OPEN_PLATFORM_GUARD`。上传 `huixinghao-all.html` 即可在同一插件页面显示现有的普通、舰长、提督、总督、房管文字弹幕和三档上舰通知；文件已内嵌完整 CSS，不需额外粘贴样式。它还订阅 `CLEAR_DATA` 来清空画面。其他事件类型没有设计，本模板不会显示。若原弹幕插件也显示这些消息，应关闭原显示以避免重复。打开本地 `huixinghao-all.html?demo=1` 可看七条模拟消息；彗星号配置画布的 `env=1` 也会显示模拟消息，收到真实消息时自动清除模拟内容。旧文件 `huixinghao-welcome.html` 仍是仅显示上舰通知的版本。
 
 三个平台的上舰、上提、上总动画现在都隐藏平台自带的头像和勋章，图案下方仅显示独立昵称牌；彗星号完整模板本身也不创建头像或勋章节点。
 
