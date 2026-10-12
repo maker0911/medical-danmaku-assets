@@ -853,8 +853,8 @@ medical-gift-renderer .medical-gift-name {
 }
 
 medical-gift-renderer .medical-gift-plate {
-  --gift-frame-height: clamp(96px, 14vw, 146px);
-  --gift-frame-edge: clamp(110px, 16vw, 167px);
+  --gift-frame-height: clamp(75px, 19vw, 146px);
+  --gift-frame-edge: calc(var(--gift-frame-height) * 1.142);
   position: relative;
   display: flex;
   align-items: center;
