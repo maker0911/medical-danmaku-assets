@@ -666,6 +666,14 @@ yt-live-chat-membership-item-renderer #header-subtext {
   display: none !important;
 }
 
+/* 上舰通知只显示画面和昵称牌，隐藏平台自带的头像与勋章。 */
+yt-live-chat-membership-item-renderer #author-photo,
+yt-live-chat-membership-item-renderer #chat-badges,
+yt-live-chat-membership-item-renderer #chip-badges,
+yt-live-chat-membership-item-renderer yt-live-chat-author-badge-renderer {
+  display: none !important;
+}
+
 yt-live-chat-membership-item-renderer #timestamp {
   display: none !important;
 }
