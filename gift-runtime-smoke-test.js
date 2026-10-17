@@ -49,7 +49,7 @@ class Node {
   }
 }
 
-for (const file of ['huixinghao-all.html', 'blivechat-all.html']) {
+for (const file of ['huixinghao-all.html', 'blivechat-all.html', 'miracle-huixinghao.html', 'miracle-blivechat.html']) {
   const html = fs.readFileSync(file, 'utf8');
   const script = html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
   if (!script) throw Error(`${file}: missing inline script`);
@@ -65,7 +65,7 @@ for (const file of ['huixinghao-all.html', 'blivechat-all.html']) {
   };
   vm.runInNewContext(script, { window, document, location: { search: '' }, URL, URLSearchParams, Number, String, Array, Set, Math }, { filename: file });
 
-  if (file === 'huixinghao-all.html') {
+  if (file.includes('huixinghao')) {
     const subscription = posts.find(message => message.fun === 'subscribe');
     if (!subscription?.args.includes('LIVE_OPEN_PLATFORM_SEND_GIFT')) throw Error('Huixinghao gift not subscribed');
     if (!subscription?.args.includes('LIVE_OPEN_PLATFORM_SUPER_CHAT')) throw Error('Huixinghao SC not subscribed');
@@ -96,7 +96,7 @@ for (const file of ['huixinghao-all.html', 'blivechat-all.html']) {
   const card = items.children[0];
   const icon = card?.querySelector('.medical-gift-icon');
   const count = card?.querySelector('.medical-gift-count');
-  const expected = file === 'blivechat-all.html' ? '×5' : '×3';
+  const expected = file.includes('blivechat') ? '×5' : '×3';
   if (items.children.length !== 2 || card.tagName !== 'medical-gift-renderer' ||
       icon?.src !== 'https://example.com/icon.png' || count?.textContent !== expected) {
     throw Error(`${file}: gift data mismatch`);

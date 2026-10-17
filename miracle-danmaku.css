@@ -1,0 +1,213 @@
+/* 奇迹款文字弹幕：所有用户同一底框，左下与右上各一张装饰。 */
+body,
+yt-live-chat-renderer,
+yt-live-chat-item-list-renderer,
+#items { background: transparent !important; }
+
+#items { container-type: inline-size; }
+
+yt-live-chat-text-message-renderer,
+yt-live-chat-text-message-renderer * { box-sizing: border-box !important; }
+
+yt-live-chat-text-message-renderer {
+  display: block !important;
+  position: relative !important;
+  width: auto !important;
+  margin: 25px 54px 47px !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif !important;
+}
+
+yt-live-chat-text-message-renderer #card {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* 原图 1308×79：圆角 40px，顶部 38px、底部 38px、中间 3px。
+   九片各自定位，正文增高时只拉伸平直的中段。 */
+yt-live-chat-text-message-renderer #content {
+  --miracle-cap: 40px;
+  --miracle-top: 38px;
+  --miracle-bottom: 38px;
+  --miracle-left-size: 93px;
+  --miracle-left-x: -29px;
+  --miracle-left-y: -44px;
+  --miracle-right-size: 94px;
+  --miracle-right-x: -29px;
+  --miracle-right-y: -43px;
+  position: relative !important;
+  isolation: isolate;
+  display: block !important;
+  width: max-content !important;
+  min-width: min(310px, 100%) !important;
+  max-width: 100% !important;
+  min-height: 92px !important;
+  margin: 0 !important;
+  padding: 18px 64px 18px 65px !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 40px !important;
+  box-shadow: none !important;
+  background-color: #c8def2 !important;
+  background-image:
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/top_left.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/top_center.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/top_right.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/middle_left.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/middle_center.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/middle_right.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/bottom_left.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/bottom_center.png"),
+    url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/bottom_right.png") !important;
+  background-size:
+    var(--miracle-cap) var(--miracle-top),
+    calc(100% - 2 * var(--miracle-cap)) var(--miracle-top),
+    var(--miracle-cap) var(--miracle-top),
+    var(--miracle-cap) calc(100% - var(--miracle-top) - var(--miracle-bottom)),
+    calc(100% - 2 * var(--miracle-cap)) calc(100% - var(--miracle-top) - var(--miracle-bottom)),
+    var(--miracle-cap) calc(100% - var(--miracle-top) - var(--miracle-bottom)),
+    var(--miracle-cap) var(--miracle-bottom),
+    calc(100% - 2 * var(--miracle-cap)) var(--miracle-bottom),
+    var(--miracle-cap) var(--miracle-bottom) !important;
+  background-position:
+    left top, center top, right top,
+    left center, center center, right center,
+    left bottom, center bottom, right bottom !important;
+  background-repeat: no-repeat !important;
+}
+
+/* 图二固定在底框左下角，图三固定在右上角；两者不占正文宽高。 */
+yt-live-chat-text-message-renderer #content::before,
+yt-live-chat-text-message-renderer #content::after {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 1 !important;
+  display: block !important;
+  width: var(--miracle-left-size) !important;
+  height: 97px !important;
+  pointer-events: none !important;
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
+  animation: none !important;
+}
+
+yt-live-chat-text-message-renderer #content::before {
+  left: var(--miracle-left-x) !important;
+  bottom: var(--miracle-left-y) !important;
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/left_bottom.png") !important;
+}
+
+yt-live-chat-text-message-renderer #content::after {
+  right: var(--miracle-right-x) !important;
+  top: var(--miracle-right-y) !important;
+  width: var(--miracle-right-size) !important;
+  background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/right_top.png") !important;
+}
+
+yt-live-chat-text-message-renderer #author-photo,
+yt-live-chat-text-message-renderer #timestamp,
+yt-live-chat-text-message-renderer #chat-badges { display: none !important; }
+
+yt-live-chat-text-message-renderer yt-live-chat-author-chip {
+  position: relative !important;
+  z-index: 2 !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 0 5px !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+yt-live-chat-text-message-renderer #author-name {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #5c7eac !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  text-shadow: none !important;
+  background: transparent !important;
+}
+
+yt-live-chat-text-message-renderer #image-and-message,
+yt-live-chat-text-message-renderer #content > #message {
+  position: relative !important;
+  z-index: 2 !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+
+yt-live-chat-text-message-renderer #message {
+  display: block !important;
+  color: #3e5c86 !important;
+  font-size: 23px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  text-shadow: none !important;
+}
+
+yt-live-chat-text-message-renderer #message img.emoji {
+  width: auto !important;
+  height: 29px !important;
+  max-width: 100% !important;
+  vertical-align: -5px !important;
+  object-fit: contain !important;
+}
+
+yt-live-chat-text-message-renderer #message img.blc-large-emoji {
+  height: 44px !important;
+  vertical-align: -8px !important;
+}
+
+@media (max-width: 480px) {
+  yt-live-chat-text-message-renderer { margin: 18px 36px 42px !important; }
+  yt-live-chat-text-message-renderer #content {
+    --miracle-left-size: 72px;
+    --miracle-left-x: -20px;
+    --miracle-left-y: -36px;
+    --miracle-right-size: 72px;
+    --miracle-right-x: -20px;
+    --miracle-right-y: -36px;
+    padding: 17px 42px 18px !important;
+  }
+  yt-live-chat-text-message-renderer #content::before,
+  yt-live-chat-text-message-renderer #content::after { height: 75px !important; }
+  yt-live-chat-text-message-renderer #message { font-size: 19px !important; }
+}
+
+@container (max-width: 480px) {
+  yt-live-chat-text-message-renderer { margin: 18px 36px 42px !important; }
+  yt-live-chat-text-message-renderer #content {
+    --miracle-left-size: 72px;
+    --miracle-left-x: -20px;
+    --miracle-left-y: -36px;
+    --miracle-right-size: 72px;
+    --miracle-right-x: -20px;
+    --miracle-right-y: -36px;
+    padding: 17px 42px 18px !important;
+  }
+  yt-live-chat-text-message-renderer #content::before,
+  yt-live-chat-text-message-renderer #content::after { height: 75px !important; }
+  yt-live-chat-text-message-renderer #message { font-size: 19px !important; }
+}
