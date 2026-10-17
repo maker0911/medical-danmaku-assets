@@ -36,12 +36,14 @@ yt-live-chat-text-message-renderer #content {
   --miracle-cap: 40px;
   --miracle-top: 38px;
   --miracle-bottom: 38px;
-  --miracle-left-size: 93px;
-  --miracle-left-x: -29px;
-  --miracle-left-y: -44px;
-  --miracle-right-size: 94px;
-  --miracle-right-x: -29px;
-  --miracle-right-y: -43px;
+  --miracle-left-size: 72px;
+  --miracle-left-height: 75px;
+  --miracle-left-x: -17px;
+  --miracle-left-y: -30px;
+  --miracle-right-size: 72px;
+  --miracle-right-height: 74px;
+  --miracle-right-x: -17px;
+  --miracle-right-y: -29px;
   position: relative !important;
   isolation: isolate;
   display: block !important;
@@ -91,7 +93,7 @@ yt-live-chat-text-message-renderer #content::after {
   z-index: 1 !important;
   display: block !important;
   width: var(--miracle-left-size) !important;
-  height: 97px !important;
+  height: var(--miracle-left-height) !important;
   pointer-events: none !important;
   background-repeat: no-repeat !important;
   background-size: contain !important;
@@ -108,6 +110,7 @@ yt-live-chat-text-message-renderer #content::after {
   right: var(--miracle-right-x) !important;
   top: var(--miracle-right-y) !important;
   width: var(--miracle-right-size) !important;
+  height: var(--miracle-right-height) !important;
   background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/right_top.png") !important;
 }
 
@@ -183,31 +186,31 @@ yt-live-chat-text-message-renderer #message img.blc-large-emoji {
 @media (max-width: 480px) {
   yt-live-chat-text-message-renderer { margin: 18px 36px 42px !important; }
   yt-live-chat-text-message-renderer #content {
-    --miracle-left-size: 72px;
-    --miracle-left-x: -20px;
-    --miracle-left-y: -36px;
-    --miracle-right-size: 72px;
-    --miracle-right-x: -20px;
-    --miracle-right-y: -36px;
+    --miracle-left-size: 58px;
+    --miracle-left-height: 60px;
+    --miracle-left-x: -14px;
+    --miracle-left-y: -24px;
+    --miracle-right-size: 58px;
+    --miracle-right-height: 60px;
+    --miracle-right-x: -14px;
+    --miracle-right-y: -23px;
     padding: 17px 42px 18px !important;
   }
-  yt-live-chat-text-message-renderer #content::before,
-  yt-live-chat-text-message-renderer #content::after { height: 75px !important; }
   yt-live-chat-text-message-renderer #message { font-size: 19px !important; }
 }
 
 @container (max-width: 480px) {
   yt-live-chat-text-message-renderer { margin: 18px 36px 42px !important; }
   yt-live-chat-text-message-renderer #content {
-    --miracle-left-size: 72px;
-    --miracle-left-x: -20px;
-    --miracle-left-y: -36px;
-    --miracle-right-size: 72px;
-    --miracle-right-x: -20px;
-    --miracle-right-y: -36px;
+    --miracle-left-size: 58px;
+    --miracle-left-height: 60px;
+    --miracle-left-x: -14px;
+    --miracle-left-y: -24px;
+    --miracle-right-size: 58px;
+    --miracle-right-height: 60px;
+    --miracle-right-x: -14px;
+    --miracle-right-y: -23px;
     padding: 17px 42px 18px !important;
   }
-  yt-live-chat-text-message-renderer #content::before,
-  yt-live-chat-text-message-renderer #content::after { height: 75px !important; }
   yt-live-chat-text-message-renderer #message { font-size: 19px !important; }
 }

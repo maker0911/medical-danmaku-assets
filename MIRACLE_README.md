@@ -17,8 +17,8 @@
 
 在 `miracle-danmaku.css` 的 `#content` 规则里修改这些参数：
 
-- `--miracle-left-size`、`--miracle-left-x`、`--miracle-left-y`：左下装饰大小、水平和竖直偏移。
-- `--miracle-right-size`、`--miracle-right-x`、`--miracle-right-y`：右上装饰大小、水平和竖直偏移。
+- `--miracle-left-size`、`--miracle-left-height`、`--miracle-left-x`、`--miracle-left-y`：左下装饰宽高及水平、竖直偏移。
+- `--miracle-right-size`、`--miracle-right-height`、`--miracle-right-x`、`--miracle-right-y`：右上装饰宽高及水平、竖直偏移。
 
 负的水平或竖直偏移会让装饰伸出底框。窄画布还有 `@media` 和 `@container` 两组同值规则，调整移动端时应同时修改。
 
