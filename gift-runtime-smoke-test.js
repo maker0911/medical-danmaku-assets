@@ -49,7 +49,7 @@ class Node {
   }
 }
 
-for (const file of ['huixinghao-all.html', 'blivechat-all.html', 'miracle-huixinghao.html', 'miracle-blivechat.html']) {
+for (const file of ['huixinghao-all.html', 'blivechat-all.html', 'miracle-huixinghao.html', 'miracle-blivechat.html', 'index.html']) {
   const html = fs.readFileSync(file, 'utf8');
   const script = html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
   if (!script) throw Error(`${file}: missing inline script`);
@@ -65,7 +65,7 @@ for (const file of ['huixinghao-all.html', 'blivechat-all.html', 'miracle-huixin
   };
   vm.runInNewContext(script, { window, document, location: { search: '' }, URL, URLSearchParams, Number, String, Array, Set, Math }, { filename: file });
 
-  if (file.includes('huixinghao')) {
+  if (file.includes('huixinghao') || file === 'index.html') {
     const subscription = posts.find(message => message.fun === 'subscribe');
     if (!subscription?.args.includes('LIVE_OPEN_PLATFORM_SEND_GIFT')) throw Error('Huixinghao gift not subscribed');
     if (!subscription?.args.includes('LIVE_OPEN_PLATFORM_SUPER_CHAT')) throw Error('Huixinghao SC not subscribed');

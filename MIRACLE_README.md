@@ -5,7 +5,7 @@
 ## 使用文件
 
 - `miracle-danmaku.css`：新款完整文字弹幕 CSS，可粘贴到 BLiveChat、小fa朵的自定义 CSS 区域。
-- `miracle-huixinghao.html`：彗星号完整模板，包含新文字弹幕样式及现有上舰、礼物、醒目留言通知，上传为插件页面。
+- `index.html`：彗星号要求的模板入口文件名。此文件包含新文字弹幕样式及现有上舰、礼物、醒目留言通知，直接上传为插件页面。`miracle-huixinghao.html` 保留为同内容的旧链接兼容文件。
 - `miracle-blivechat.html`：使用 BLiveChat 自定义 HTML 模板时可替换成此版本；它沿用原来的消息读取逻辑。
 - `miracle-preview.html`：本地静态预览，包含短消息、长昵称、多行正文和表情。
 
@@ -24,4 +24,4 @@
 
 负的水平或竖直偏移会让装饰伸出底框。窄画布还有 `@media` 和 `@container` 两组同值规则，调整移动端时应同时修改。
 
-执行 `node build-miracle-templates.js` 可以从当前完整模板和新 CSS 重新生成彗星号、BLiveChat 两份奇迹款模板及本地预览 CSS。
+执行 `node build-miracle-templates.js` 可以从当前完整模板和新 CSS 重新生成彗星号入口 `index.html`、兼容文件 `miracle-huixinghao.html`、BLiveChat 模板及本地预览 CSS。

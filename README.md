@@ -1,12 +1,14 @@
 # 医疗风弹幕：BLiveChat、小fa朵、彗星号
 
+当前奇迹款彗星号插件请上传根目录的 `index.html`。彗星号要求模板入口使用这个文件名；它已内嵌文字弹幕、上舰、礼物与醒目留言的完整样式和消息逻辑。`miracle-huixinghao.html` 仅保留旧链接兼容，具体用法见 `MIRACLE_README.md`。
+
 ## 上舰装饰
 
 `bilibili.css` 现包含独立的“欢迎上舰”装饰，只匹配 `yt-live-chat-membership-item-renderer` 上舰通知，不改文字弹幕、礼物或 SC。原有的 13 张素材和新增的三张等级标题图都放在 `assets/welcome_layers_13/`；它们都是 2048×682 的同坐标透明画布，按原位叠合并等比缩放。舰长使用“感谢舰长”，提督使用“感谢提督”，总督使用“感谢总督”；只有标题图按等级替换，其余图层与动画相同。没有等级属性的旧通知继续显示原“欢迎上舰”标题。背景和小装饰先出现，标题随后轻弹入场，左侧输液袋、右侧听诊器从两边渐显，右下创可贴最后落位。左右两个小加号依次轻弹出现，之后各自缓慢上下悬浮并轻微摇摆。三个平台都隐藏图下原有的整句上舰说明，只在图下显示奶白水蓝的独立昵称牌。
 
 打开 `welcome-ship-preview.html` 可看舰长、提督、总督效果并重播动画。`welcome-ship.css` 是这部分的独立 CSS，已同步附加到完整的 `bilibili.css`；粘贴完整 CSS 时不用再次粘贴独立文件。图片使用公开仓库固定版本的绝对 URL，预览页则改用本地图片路径。BLiveChat 上舰通知的 `blc-guard-level` 属性区分 3＝舰长、2＝提督、1＝总督；小fa朵若复用同结构便会匹配，需在平台预览确认。
 
-彗星号开发文档把用户文字弹幕定义为 `LIVE_OPEN_PLATFORM_DM`，大航海开通或续费定义为 `LIVE_OPEN_PLATFORM_GUARD`，礼物定义为 `LIVE_OPEN_PLATFORM_SEND_GIFT`，醒目留言定义为 `LIVE_OPEN_PLATFORM_SUPER_CHAT`。上传 `huixinghao-all.html` 即可在同一插件页面显示现有的普通、舰长、提督、总督、房管文字弹幕、三档上舰通知、礼物感谢与醒目留言；文件已内嵌完整 CSS，不需额外粘贴样式。它还订阅 `CLEAR_DATA` 来清空画面。未设计的事件类型不会显示。若原弹幕插件也显示这些消息，应关闭原显示以避免重复。打开本地 `huixinghao-all.html?demo=1` 可看九条模拟消息；彗星号配置画布的 `env=1` 也会显示模拟消息，收到真实消息时自动清除模拟内容。旧文件 `huixinghao-welcome.html` 仍是仅显示上舰通知的版本。
+彗星号开发文档把用户文字弹幕定义为 `LIVE_OPEN_PLATFORM_DM`，大航海开通或续费定义为 `LIVE_OPEN_PLATFORM_GUARD`，礼物定义为 `LIVE_OPEN_PLATFORM_SEND_GIFT`，醒目留言定义为 `LIVE_OPEN_PLATFORM_SUPER_CHAT`。当前 `index.html` 可在同一插件页面显示普通、舰长、提督、总督、房管文字弹幕、三档上舰通知、礼物感谢与醒目留言；文件已内嵌完整 CSS，不需额外粘贴样式。它还订阅 `CLEAR_DATA` 来清空画面。未设计的事件类型不会显示。若原弹幕插件也显示这些消息，应关闭原显示以避免重复。打开本地 `index.html?demo=1` 可看模拟消息；彗星号配置画布的 `env=1` 也会显示模拟消息，收到真实消息时自动清除模拟内容。旧文件 `huixinghao-welcome.html` 仍是仅显示上舰通知的版本。
 
 ## 礼物感谢
 
