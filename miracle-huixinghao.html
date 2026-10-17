@@ -13,6 +13,37 @@ yt-live-chat-item-list-renderer,
 
 #items { container-type: inline-size; }
 
+/* 平台测试画布的白色边条来自滚动条轨道；保留滚动，只隐藏轨道。 */
+#items,
+#item-scroller,
+yt-live-chat-renderer,
+yt-live-chat-item-list-renderer {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+#items::-webkit-scrollbar,
+#item-scroller::-webkit-scrollbar,
+yt-live-chat-renderer::-webkit-scrollbar,
+yt-live-chat-item-list-renderer::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* 如果滚动发生在整个聊天页上，也只处理含聊天列表的页面。 */
+html:has(#items),
+body:has(#items) {
+  scrollbar-width: none !important;
+}
+
+html:has(#items)::-webkit-scrollbar,
+body:has(#items)::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 yt-live-chat-text-message-renderer,
 yt-live-chat-text-message-renderer * { box-sizing: border-box !important; }
 

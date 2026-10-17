@@ -13,6 +13,8 @@
 
 新款当前是静态样式。两个装饰使用 `#content::before` 和 `#content::after`，跟随消息底框角落移动，`pointer-events: none`，不占正文空间。正文和表情正常换行。
 
+弹幕列表和聊天页的滚动条外观已隐藏，滚动功能保留，避免小fa朵与 BLiveChat 测试画布右侧出现白色轨道。
+
 ## 调整位置
 
 在 `miracle-danmaku.css` 的 `#content` 规则里修改这些参数：
