@@ -21,6 +21,7 @@
 
 - `--miracle-left-size`、`--miracle-left-height`、`--miracle-left-x`、`--miracle-left-y`：左下装饰宽高及水平、竖直偏移。
 - `--miracle-right-size`、`--miracle-right-height`、`--miracle-right-x`、`--miracle-right-y`：右上装饰宽高及水平、竖直偏移。
+- `--miracle-left-tilt`、`--miracle-right-tilt`：两组装饰的旋转角度，当前分别为 `-2deg` 和 `16deg`。
 
 负的水平或竖直偏移会让装饰伸出底框。窄画布还有 `@media` 和 `@container` 两组同值规则，调整移动端时应同时修改。
 
