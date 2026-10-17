@@ -1,8 +1,13 @@
 const fs = require('fs');
 
 const css = fs.readFileSync('miracle-danmaku.css', 'utf8').trimEnd();
-const assetUrl = 'https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/';
-fs.writeFileSync('miracle-preview-local.css', css.replaceAll(assetUrl, 'assets/miracle/') + '\n');
+const assetUrls = [
+  'https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/',
+  'https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/509f97dea30b6576a503fa95fd4e4cfc7e3f5078/assets/miracle/'
+];
+let previewCss = css;
+for (const assetUrl of assetUrls) previewCss = previewCss.replaceAll(assetUrl, 'assets/miracle/');
+fs.writeFileSync('miracle-preview-local.css', previewCss + '\n');
 const variants = [
   ['huixinghao-all.html', ['index.html', 'miracle-huixinghao.html'], '彗星号 · 奇迹款弹幕'],
   ['blivechat-all.html', ['miracle-blivechat.html'], 'BLiveChat · 奇迹款弹幕']

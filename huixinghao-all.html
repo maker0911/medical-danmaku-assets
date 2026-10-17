@@ -1078,6 +1078,15 @@ medical-gift-renderer .medical-sc-message {
         }
         wrapper.append(message);
         content.append(chip, wrapper);
+        const faceUrl = safeImageUrl(data.face);
+        if (faceUrl) {
+          const photo = document.createElement('img');
+          photo.id = 'author-photo';
+          photo.src = faceUrl;
+          photo.alt = '';
+          photo.referrerPolicy = 'no-referrer';
+          card.append(photo);
+        }
         card.append(content);
         item.append(card);
         return item;

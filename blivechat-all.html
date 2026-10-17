@@ -1075,6 +1075,15 @@ medical-gift-renderer .medical-sc-message {
         }
         wrapper.append(message);
         content.append(chip, wrapper);
+        const faceUrl = safeImageUrl(data.face);
+        if (faceUrl) {
+          const photo = document.createElement('img');
+          photo.id = 'author-photo';
+          photo.src = faceUrl;
+          photo.alt = '';
+          photo.referrerPolicy = 'no-referrer';
+          card.append(photo);
+        }
         card.append(content);
         item.append(card);
         return item;
@@ -1207,7 +1216,7 @@ medical-gift-renderer .medical-sc-message {
           const hasImage = Array.isArray(msg.contentParts) &&
             msg.contentParts.some(part => part && part.type === 1);
           item = createTextMessage({
-            platform: 'bili', uname: msg.authorName,
+            platform: 'bili', uname: msg.authorName, face: msg.avatarUrl,
             message: msg.content || (hasImage ? '[表情]' : ''),
             guardLevel: msg.privilegeType,
             isAnchor: msg.authorType === 3,

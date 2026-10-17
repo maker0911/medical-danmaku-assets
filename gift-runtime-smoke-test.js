@@ -111,4 +111,21 @@ for (const file of ['huixinghao-all.html', 'blivechat-all.html', 'miracle-huixin
   }
   console.log(`${file}: gift, icon and count OK (${expected})`);
   console.log(`${file}: SC heading, nickname and line breaks OK`);
+
+  if (file.includes('huixinghao') || file === 'index.html') {
+    listeners.message({ source: parent, data: {
+      category: 'event', type: 'LIVE_OPEN_PLATFORM_DM',
+      args: [{ platform: 'bili', uname: '头像测试', face: 'https://example.com/face.png', message: '带头像的文字弹幕' }]
+    } });
+  } else {
+    listeners.message({ source: parent, data: {
+      type: 'blcAddMsg', data: { id: 'dm-1', type: 0, authorName: '头像测试', avatarUrl: 'https://example.com/face.png', content: '带头像的文字弹幕' }
+    } });
+  }
+  const textCard = items.children[2];
+  if (textCard?.tagName !== 'yt-live-chat-text-message-renderer' ||
+      textCard.querySelector('#author-photo')?.src !== 'https://example.com/face.png') {
+    throw Error(`${file}: text avatar missing`);
+  }
+  console.log(`${file}: text avatar OK`);
 }

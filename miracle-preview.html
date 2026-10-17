@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>奇迹款弹幕预览</title>
-  <link rel="stylesheet" href="miracle-preview-local.css?v=4">
+  <link rel="stylesheet" href="miracle-preview-local.css?v=5">
   <style>
     body { margin: 0; padding: 24px 12px 50px; background: #25283e !important; }
     h1, h2 { color: #ecf3ff; font-family: "Microsoft YaHei", sans-serif; }
@@ -31,5 +31,16 @@
       <yt-live-chat-text-message-renderer author-type="moderator" blc-guard-level="0"><div id="card"><div id="content"><yt-live-chat-author-chip><span id="author-name">房管</span></yt-live-chat-author-chip><div id="image-and-message"><span id="message">发一个表情 <img class="emoji" alt="笑脸" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='18' fill='%23ffe59f'/%3E%3Ctext x='20' y='28' font-size='24' text-anchor='middle'%3E%E2%98%BA%3C/text%3E%3C/svg%3E"> 再继续聊天。</span></div></div></div></yt-live-chat-text-message-renderer>
     </main>
   </section>
+  <script>
+    const avatarColors = ['#89bde5', '#b9a7dc', '#90d2c9', '#e3b3bd'];
+    document.querySelectorAll('yt-live-chat-text-message-renderer #card').forEach((card, i) => {
+      const photo = document.createElement('img');
+      photo.id = 'author-photo';
+      photo.alt = '';
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="${avatarColors[i]}"/><circle cx="50" cy="39" r="20" fill="#fff"/><path d="M12 100a38 38 0 0 1 76 0" fill="#fff"/></svg>`;
+      photo.src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+      card.prepend(photo);
+    });
+  </script>
 </body>
 </html>

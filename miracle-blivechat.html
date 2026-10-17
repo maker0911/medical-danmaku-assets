@@ -49,6 +49,12 @@ yt-live-chat-text-message-renderer,
 yt-live-chat-text-message-renderer * { box-sizing: border-box !important; }
 
 yt-live-chat-text-message-renderer {
+  --miracle-avatar-frame-size: 78px;
+  --miracle-avatar-frame-x: -36px;
+  --miracle-avatar-frame-y: -18px;
+  --miracle-avatar-size: 42px;
+  --miracle-avatar-x: -18px;
+  --miracle-avatar-y: 3px;
   display: block !important;
   position: relative !important;
   width: auto !important;
@@ -59,6 +65,7 @@ yt-live-chat-text-message-renderer {
 }
 
 yt-live-chat-text-message-renderer #card {
+  position: relative !important;
   display: block !important;
   width: 100% !important;
   margin: 0 !important;
@@ -67,6 +74,46 @@ yt-live-chat-text-message-renderer #card {
   border: 0 !important;
   box-shadow: none !important;
   background: transparent !important;
+}
+
+/* 方形医疗头像牌；原图的奶白留白作底，头像放在内侧且不遮盖角饰。 */
+yt-live-chat-text-message-renderer #card::before {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 3 !important;
+  display: block !important;
+  left: var(--miracle-avatar-frame-x) !important;
+  top: var(--miracle-avatar-frame-y) !important;
+  width: var(--miracle-avatar-frame-size) !important;
+  height: var(--miracle-avatar-frame-size) !important;
+  pointer-events: none !important;
+  background: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/509f97dea30b6576a503fa95fd4e4cfc7e3f5078/assets/miracle/avatar_frame.png") center / contain no-repeat !important;
+}
+
+yt-live-chat-text-message-renderer #author-photo {
+  position: absolute !important;
+  z-index: 4 !important;
+  display: block !important;
+  left: var(--miracle-avatar-x) !important;
+  top: var(--miracle-avatar-y) !important;
+  width: var(--miracle-avatar-size) !important;
+  height: var(--miracle-avatar-size) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 2px !important;
+  overflow: hidden !important;
+  object-fit: cover !important;
+  background: #dfedfa !important;
+  box-shadow: none !important;
+}
+
+yt-live-chat-text-message-renderer #author-photo img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 2px !important;
 }
 
 /* 原图 1308×79：圆角 40px，顶部 38px、底部 38px、中间 3px。
@@ -159,7 +206,6 @@ yt-live-chat-text-message-renderer #content::after {
   background-image: url("https://raw.githubusercontent.com/maker0911/medical-danmaku-assets/4400f596a4e7ac0b414bf40860499d3c4ce036a4/assets/miracle/right_top.png") !important;
 }
 
-yt-live-chat-text-message-renderer #author-photo,
 yt-live-chat-text-message-renderer #timestamp,
 yt-live-chat-text-message-renderer #chat-badges { display: none !important; }
 
@@ -239,7 +285,7 @@ yt-live-chat-text-message-renderer #message img.blc-large-emoji {
     --miracle-right-height: 54px;
     --miracle-right-x: -9px;
     --miracle-right-y: -18px;
-    padding: 17px 42px 18px !important;
+    padding: 17px 42px 18px 48px !important;
   }
   yt-live-chat-text-message-renderer #message { font-size: 19px !important; }
 }
@@ -255,7 +301,7 @@ yt-live-chat-text-message-renderer #message img.blc-large-emoji {
     --miracle-right-height: 54px;
     --miracle-right-x: -9px;
     --miracle-right-y: -18px;
-    padding: 17px 42px 18px !important;
+    padding: 17px 42px 18px 48px !important;
   }
   yt-live-chat-text-message-renderer #message { font-size: 19px !important; }
 }
@@ -852,6 +898,15 @@ medical-gift-renderer .medical-sc-message {
         }
         wrapper.append(message);
         content.append(chip, wrapper);
+        const faceUrl = safeImageUrl(data.face);
+        if (faceUrl) {
+          const photo = document.createElement('img');
+          photo.id = 'author-photo';
+          photo.src = faceUrl;
+          photo.alt = '';
+          photo.referrerPolicy = 'no-referrer';
+          card.append(photo);
+        }
         card.append(content);
         item.append(card);
         return item;
@@ -984,7 +1039,7 @@ medical-gift-renderer .medical-sc-message {
           const hasImage = Array.isArray(msg.contentParts) &&
             msg.contentParts.some(part => part && part.type === 1);
           item = createTextMessage({
-            platform: 'bili', uname: msg.authorName,
+            platform: 'bili', uname: msg.authorName, face: msg.avatarUrl,
             message: msg.content || (hasImage ? '[表情]' : ''),
             guardLevel: msg.privilegeType,
             isAnchor: msg.authorType === 3,
