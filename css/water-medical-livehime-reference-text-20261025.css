@@ -1,0 +1,28 @@
+@import url("https://cdn.jsdelivr.net/gh/maker0911/medical-danmaku-assets@4a5df6ecd1d9da13a418412fd0f197b22ef2c09f/css/water-medical-livehime-20261025.css");
+
+/* Match the reference: white glyphs with a 1px medical-blue outline. */
+:root yt-live-chat-text-message-renderer #author-name,
+:root yt-live-chat-text-message-renderer #author-name :not(img):not(svg),
+:root yt-live-chat-text-message-renderer #message,
+:root yt-live-chat-text-message-renderer #message :not(img):not(svg),
+:root medical-gift-renderer .medical-gift-name,
+:root medical-gift-renderer .medical-gift-name :not(img):not(svg),
+:root medical-gift-renderer .medical-gift-line,
+:root medical-gift-renderer .medical-gift-line :not(img):not(svg),
+:root medical-gift-renderer .medical-sc-heading,
+:root medical-gift-renderer .medical-sc-message,
+:root medical-gift-renderer .medical-sc-message :not(img):not(svg),
+:root yt-live-chat-membership-item-renderer #author-name,
+:root yt-live-chat-membership-item-renderer #author-name :not(img):not(svg),
+:root yt-live-chat-membership-item-renderer #header-content::before,
+:root yt-live-chat-paid-message-renderer #author-name,
+:root yt-live-chat-paid-message-renderer #author-name :not(img):not(svg),
+:root yt-live-chat-paid-message-renderer #message,
+:root yt-live-chat-paid-message-renderer #message :not(img):not(svg),
+:root yt-live-chat-paid-message-renderer:not([giftname]) #content::before {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  -webkit-text-stroke: 1px #5c83b5 !important;
+  paint-order: stroke fill !important;
+  text-shadow: none !important;
+}
